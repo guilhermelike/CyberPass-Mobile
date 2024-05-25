@@ -1,30 +1,11 @@
-import * as React from 'react';
-import { View, Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import 'react-native-gesture-handler';
+import React from "react";
+import TabComponent from "./src/routes/Tab";
+import DrawerFunctions from './src/routes/Tab';
+import DrawerComponent from './src/routes/Tab';
 
-const Stack = createNativeStackNavigator();
-
-function HomeScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-    </View>
+export default function App(){
+  return(
+      <DrawerComponent></DrawerComponent>
   );
 }
-
-function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: 'CyberPass' }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-
-export default App;
