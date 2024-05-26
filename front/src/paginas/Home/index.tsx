@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet, Image, ImageBackground, TextInput} from 'react-native'
+import { View, Text, Button, StyleSheet, Image, ImageBackground, TextInput, ScrollView} from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { TabTypes } from '../../routes/Tab';
@@ -14,11 +14,12 @@ const Home = () => {
     <>
     <StatusBar style='light'></StatusBar>
     <View style={styles.container}>
+      
 
       <View style={styles.header}>
         <Text style={styles.branco}>Cyber<Text style={styles.rosa}>Pass</Text></Text>
       </View>
-
+      <ScrollView style={styles.scrollview}>
         <ImageBackground source={require('../../../assets/image2.png')} resizeMode='cover' style={styles.image}>
           <Text style={styles.titulo}>A Casa dos Esports</Text>
           <Text style={styles.subtitulo}>Por quê assistir de casa quando você pode <Text style={{color: '#FF005C', fontWeight: '400'}}>vivenciar</Text></Text>
@@ -36,6 +37,27 @@ const Home = () => {
 
           </View>
         </View>
+
+        <View style={styles.campeonatos}>
+          <Text style={styles.textcamp}>Eventos:</Text>
+          <View style={styles.containercard}>
+            <Card></Card>
+            <Card></Card>
+
+          </View>
+          
+        </View>
+
+        <View style={styles.campeonatos}>
+          <Text style={styles.textcamp}>Cidades:</Text>
+          <View style={styles.containercard}>
+            <Card></Card>
+            <Card></Card>
+
+          </View>
+          
+        </View>
+        </ScrollView>
 
    
       {/*<Button title="Fazer Login"
@@ -56,6 +78,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignContent: 'flex-start',
     alignItems: 'flex-start'
+  },
+  scrollview:{
+    
   },
   containercard:{
     display: 'flex',
