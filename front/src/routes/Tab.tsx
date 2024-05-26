@@ -15,7 +15,8 @@ type TabNavigation = {
   // name: string;
   // age: number;
   // adult: boolean;  
-  Login: undefined;
+  Carrinho: undefined;
+  Usuario: undefined;
 };
 
 export type TabTypes = BottomTabNavigationProp<TabNavigation>;
@@ -34,14 +35,11 @@ function TabComponent() {
       <Tab.Navigator
        screenOptions={{
         tabBarActiveTintColor: '#FF005C',
-        tabBarInactiveTintColor: '#fff',
+        tabBarInactiveTintColor: 'black',
         tabBarShowLabel: false,
-        headerStyle:{
-            backgroundColor: "black",
-        },
-        headerTitle: (props) => <LogoTitle {...props}/>,
+        headerShown: false,   
         tabBarStyle:{
-            backgroundColor: "black",
+            backgroundColor: "white",
             position: "absolute",
             bottom: 10,
             width: '70%',

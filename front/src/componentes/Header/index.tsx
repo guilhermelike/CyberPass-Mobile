@@ -4,9 +4,9 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function Header(){
     return(
         <View>
-            <div style={styles.header}>
-
-            </div>
+            <View style={styles.header}>
+                
+            </View>
         </View>
     );
 }
@@ -15,8 +15,13 @@ const styles = StyleSheet.create({
     header: {
       flex: 1,
       width: '100%',
-      backgroundColor: 'red',
       alignItems: 'center',
       justifyContent: 'center',
     },
+    rosa:{
+        color: '#FF005C'
+    },
+    branco:{
+        color: '#FFF'
+    }
   });
