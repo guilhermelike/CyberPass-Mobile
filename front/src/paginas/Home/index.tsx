@@ -14,12 +14,11 @@ const Home = () => {
     <>
     <StatusBar style='light'></StatusBar>
     <View style={styles.container}>
-      
-
+    
       <View style={styles.header}>
         <Text style={styles.branco}>Cyber<Text style={styles.rosa}>Pass</Text></Text>
       </View>
-      <ScrollView style={styles.scrollview}>
+      <ScrollView>
         <ImageBackground source={require('../../../assets/image2.png')} resizeMode='cover' style={styles.image}>
           <Text style={styles.titulo}>A Casa dos Esports</Text>
           <Text style={styles.subtitulo}>Por quê assistir de casa quando você pode <Text style={{color: '#FF005C', fontWeight: '400'}}>vivenciar</Text></Text>
@@ -29,34 +28,58 @@ const Home = () => {
           </View>
         </ImageBackground>
 
-        <View style={styles.campeonatos}>
-          <Text style={styles.textcamp}>Campeonatos:</Text>
-          <View style={styles.containercard}>
-            <Card></Card>
-            <Card></Card>
-
+        <ImageBackground source={require('../../../assets/background.png')} resizeMode='cover'>
+          <View style={styles.campeonatos}>
+            <Text style={styles.textcamp}>Campeonatos</Text>
+            <View style={styles.containercard}>
+              <ScrollView horizontal={true} contentContainerStyle={{display: 'flex', gap: 20, justifyContent: 'space-between'}}>
+                <Card titulo="Valorant" data="15 Jun - 18 Jun" imagemUri={require("../../../assets/valorant.png")}></Card>
+                <Card titulo="IEM Rio 2024" data="11 Out - 13 Out" imagemUri={require("../../../assets/iem.png")}></Card>
+                <Card titulo="CBLOL" data="23 Ago" imagemUri={require("../../../assets/cblol.png")}></Card>
+                <Card titulo="GET Rio" data="02 Set - 03 Set" imagemUri={require("../../../assets/get.png")}></Card>
+              </ScrollView>
+            </View>
           </View>
-        </View>
 
-        <View style={styles.campeonatos}>
-          <Text style={styles.textcamp}>Eventos:</Text>
-          <View style={styles.containercard}>
-            <Card></Card>
-            <Card></Card>
-
+          <View style={styles.campeonatos}>
+            <Text style={styles.textcamp}>Eventos</Text>
+            <View style={styles.containercard}>
+              <ScrollView horizontal={true} contentContainerStyle={{display: 'flex', gap: 20, justifyContent: 'space-between'}}>
+                <Card titulo="Show do Gordox" data="11 Dez" imagemUri={require("../../../assets/gordox.png")}></Card>
+                <Card titulo="Show do Gordox" data="11 Dez" imagemUri={require("../../../assets/gordox.png")}></Card>
+                <Card titulo="Show do Gordox" data="11 Dez" imagemUri={require("../../../assets/gordox.png")}></Card>
+                <Card titulo="Show do Gordox" data="11 Dez" imagemUri={require("../../../assets/gordox.png")}></Card>
+              </ScrollView>
+            </View>
+            
           </View>
+
+          <View style={styles.campeonatos}>
+            <Text style={styles.textcamp}>Cidades</Text>
+            <Text style={styles.subcamp}>Rio de Janeiro</Text>
+            <View style={styles.containercard}>
+              <ScrollView horizontal={true} contentContainerStyle={{display: 'flex', gap: 20, justifyContent: 'space-between'}}>
+                <Card titulo="Valorant" data="15 Jun - 18 Jun" imagemUri={require("../../../assets/valorant.png")}></Card>
+                <Card titulo="IEM Rio 2024" data="11 Out - 13 Out" imagemUri={require("../../../assets/iem.png")}></Card>
+                <Card titulo="CBLOL" data="23 Ago" imagemUri={require("../../../assets/cblol.png")}></Card>
+                <Card titulo="GET Rio" data="02 Set - 03 Set" imagemUri={require("../../../assets/get.png")}></Card>
+              </ScrollView>
+
+            </View>
+
+            <Text style={styles.subcamp2}>São Paulo</Text>
+            <View style={styles.containercard2}>
+              <ScrollView horizontal={true} contentContainerStyle={{display: 'flex', gap: 20, justifyContent: 'space-between'}}>
+                <Card titulo="Valorant" data="15 Jun - 18 Jun" imagemUri={require("../../../assets/valorant.png")}></Card>
+                <Card titulo="IEM Rio 2024" data="11 Out - 13 Out" imagemUri={require("../../../assets/iem.png")}></Card>
+                <Card titulo="CBLOL" data="23 Ago" imagemUri={require("../../../assets/cblol.png")}></Card>
+                <Card titulo="GET Rio" data="02 Set - 03 Set" imagemUri={require("../../../assets/get.png")}></Card>
+              </ScrollView>
+
+            </View>
           
-        </View>
-
-        <View style={styles.campeonatos}>
-          <Text style={styles.textcamp}>Cidades:</Text>
-          <View style={styles.containercard}>
-            <Card></Card>
-            <Card></Card>
-
           </View>
-          
-        </View>
+          </ImageBackground>
         </ScrollView>
 
    
@@ -77,24 +100,42 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'flex-start',
     alignContent: 'flex-start',
-    alignItems: 'flex-start'
-  },
-  scrollview:{
-    
+    alignItems: 'flex-start',
+    paddingLeft: 10
   },
   containercard:{
     display: 'flex',
     flexDirection: 'row',
-    gap: 15,
+    gap: 20,
     width: '100%',
     justifyContent: 'space-around',
+  },
+  containercard2:{
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 20,
+    width: '100%',
+    justifyContent: 'space-around',
+    paddingBottom: 60
+  },
+  card:{
+    marginLeft: 10
   },
   textcamp:{
     color:'white',
     fontSize: 22,
     fontWeight: '500',
-    marginTop: 5,
+    marginTop: 10,
     marginBottom: 10
+  },
+  subcamp:{
+    color:'white',
+    fontSize: 20
+  },
+  subcamp2:{
+    color:'white',
+    fontSize: 20,
+    marginTop: 10
   },
   container: {
     display: 'flex',

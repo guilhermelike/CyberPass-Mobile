@@ -1,12 +1,12 @@
 import { View, Text, Image, StyleSheet} from 'react-native'
 import React from 'react'
 
-const Card = () => {
+const Card = (props: any) => {
   return (
     <View style={styles.container}>
-        <Image style={styles.card} source={require('../../../assets/valorant.png')}></Image>
-        <Text style={styles.titulo}>Valorant Masters</Text>
-        <Text style={styles.subtitulo}>15 Jun - 20 Jun</Text>
+        <Image style={styles.card} source={props.imagemUri}></Image>
+        <Text style={styles.titulo}>{props.titulo}</Text>
+        <Text style={styles.subtitulo}>{props.data}</Text>
     </View>
   )
 }
