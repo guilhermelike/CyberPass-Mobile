@@ -1,13 +1,11 @@
 import { View, Text, Button, StyleSheet, Image, ImageBackground, TextInput, ScrollView} from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { TabTypes } from '../../routes/Tab';
 import { StatusBar } from 'expo-status-bar';
 import { IconButton } from 'react-native-paper';
 import Card from '../../componentes/Card/Index';
 
 const Home = () => {
-  const navigation = useNavigation<TabTypes>();
   const [text, onChangeText] = React.useState('');
 
   return (

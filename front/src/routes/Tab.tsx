@@ -7,9 +7,19 @@ import Carrinho from '../paginas/Carrinho';
 import { Ionicons } from "@expo/vector-icons";
 import { View, Text, Button } from 'react-native' 
 import { NativeStackNavigationProp, createNativeStackNavigator } from '@react-navigation/native-stack';
+import Cadastro from '../paginas/Cadastro';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
+function Usuario(){
+    return(
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Login" component={Login}/>
+            <Stack.Screen name="Cadastro" component={Cadastro}/>
+        </Stack.Navigator>
+    )
+}
 
 function TabComponent() {
   return (
@@ -41,6 +51,13 @@ function TabComponent() {
                 <Ionicons name='cart' size={20} color={TintColor}/>
             ),
             tabBarBadge:1
+        }}></Tab.Screen>
+        <Tab.Screen name='Usuário' component={Usuario}
+        options={{
+            tabBarIcon: ({color:TintColor}) => (
+                <Ionicons name='person' size={20} color={TintColor}/>
+            ),
+            headerShown: false
         }}></Tab.Screen>
       </Tab.Navigator>
   );

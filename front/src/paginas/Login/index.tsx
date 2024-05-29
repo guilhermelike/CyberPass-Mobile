@@ -1,14 +1,15 @@
-import { View, Text, StatusBar, StyleSheet, TextInput, Image} from 'react-native'
+import { View, Text, StatusBar, StyleSheet, TextInput, Image, ImageBackground} from 'react-native'
 import React from 'react'
 import { Button } from 'react-native-paper'
 import { Link, useNavigation } from '@react-navigation/native';
 import Cadastro from '../Cadastro';
 
-const Login = () => {
+const Login = ({navigation}) => {
   return (
     <>
     <StatusBar></StatusBar>
     <View style={styles.container}>
+      <ImageBackground source={require('../../../assets/background.png')} resizeMode='cover' style={{alignItems: 'center', width: '100%', height: '100%'}}>
 
       <View style={styles.header}>
         <Text style={styles.branco}>Cyber<Text style={styles.rosa}>Pass</Text></Text>
@@ -44,10 +45,11 @@ const Login = () => {
 
             <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 10}}>
               <Text style={styles.branco4}>Ainda não possui cadastro?</Text>
-              <Text style={styles.rosa3}>Cadastre-se</Text>
+              <Text style={styles.rosa3} onPress={() => navigation.navigate("Cadastro")}>Cadastre-se</Text>
             </View>
           </View>
         </View>
+        </ImageBackground>
       </View>
     </>
   )
