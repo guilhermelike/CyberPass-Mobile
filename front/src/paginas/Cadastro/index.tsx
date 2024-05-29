@@ -1,10 +1,8 @@
 import { View, Text, StatusBar, StyleSheet, TextInput, Image} from 'react-native'
 import React from 'react'
 import { Button } from 'react-native-paper'
-import { Link, useNavigation } from '@react-navigation/native';
-import Cadastro from '../Cadastro';
 
-const Login = () => {
+const Cadastro = () => {
   return (
     <>
     <StatusBar></StatusBar>
@@ -39,7 +37,7 @@ const Login = () => {
             </View>
 
             <View style={styles.botao}>
-              <Button style={styles.botao2} textColor='white' labelStyle={{fontSize: 18}}>Login</Button>
+              <Button style={styles.botao2} textColor='white' labelStyle={{fontSize: 18}}>Cadastro</Button>
             </View>
 
             <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 10}}>
@@ -156,4 +154,4 @@ branco4:{
   }
 })
 
-export default Login;
+export default Cadastro;

@@ -1,31 +1,16 @@
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { NativeStackNavigationProp, createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from '../paginas/Home';
-import Login from '../paginas/Login';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import TabComponent from "./Tab";
+import Login from "../paginas/Login";
+import Carrinho from "../paginas/Carrinho";
+import Cidades from "../paginas/Cidades";
 
 const Stack = createNativeStackNavigator();
 
-type StackNavigation = {
-  Home: undefined;
-  //Home: {
-  // name: string;
-  // age: number;
-  // adult: boolean;  
-  Login: undefined;
-};
-
-export type StackTypes = NativeStackNavigationProp<StackNavigation>;
-
-function StackComponent() {
+export default function StackRoutes(){
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name='Home' component={Home}></Stack.Screen>
-        <Stack.Screen name='Login' component={Login}></Stack.Screen>
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+    <Stack.Navigator>
+      <Stack.Screen name="home" component={Cidades}/>
+    </Stack.Navigator>
+  )
 }
-
-export default StackComponent;
