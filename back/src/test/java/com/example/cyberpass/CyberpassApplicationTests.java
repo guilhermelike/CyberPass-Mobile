@@ -1,10 +1,10 @@
-package com.example.CyberPassMobile;
+package com.example.cyberpass;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CyberPassMobileApplicationTests {
+class CyberpassApplicationTests {
 
 	@Test
 	void contextLoads() {
