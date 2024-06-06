@@ -1,9 +1,10 @@
-import { View, Text, Image, StyleSheet} from 'react-native'
-import React from 'react'
+import { View, Text, Image, StyleSheet, TouchableHighlight, TouchableOpacity} from 'react-native'
+import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 const Card = (props: any) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.container} >
         <Image style={styles.card} source={props.imagemUri}></Image>
         <Text style={styles.titulo}>{props.titulo}</Text>
         <Text style={styles.subtitulo}>{props.data}</Text>

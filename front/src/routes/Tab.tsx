@@ -8,6 +8,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { View, Text, Button } from 'react-native' 
 import { NativeStackNavigationProp, createNativeStackNavigator } from '@react-navigation/native-stack';
 import Cadastro from '../paginas/Cadastro';
+import Evento from '../paginas/Evento';
+import Card from '../componentes/Card/Index';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -17,6 +19,19 @@ function Usuario(){
         <Stack.Navigator screenOptions={{headerShown: false}}>
             <Stack.Screen name="Login" component={Login}/>
             <Stack.Screen name="Cadastro" component={Cadastro}/>
+            <Stack.Screen name="Card" component={Card}/>
+            <Stack.Screen name="Home" component={Home}/>
+            <Stack.Screen name="Evento" component={Evento}/>
+
+        </Stack.Navigator>
+    )
+}
+
+function Fluxo(){
+    return(
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Home" component={Home}/>
+            <Stack.Screen name="Evento" component={Evento}/>
         </Stack.Navigator>
     )
 }
@@ -39,7 +54,7 @@ function TabComponent() {
             left: 55,
         }
     }}>
-        <Tab.Screen name='Home' component={Home}
+        <Tab.Screen name='Fluxo' component={Fluxo}
         options={{
             tabBarIcon: ({color:TintColor}) => (
                 <Ionicons name='home' size={20} color={TintColor}/>
