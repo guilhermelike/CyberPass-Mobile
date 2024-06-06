@@ -58,9 +58,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '90%',
+    width: '70%',
     padding: 15,
-    borderRadius: 5
+    borderRadius: 15
   },
   botaoText:{
     color: 'white',
@@ -71,9 +71,12 @@ const styles = StyleSheet.create({
     display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 10, paddingVertical: 10, verticalAlign: 'middle'
   },
   counter:{
-    width: '50%',
-    height: 50,
+    width: '45%',
+    height: '80%',
     borderWidth: 1,
+    borderRadius: 15,
+    paddingHorizontal: 0
+    
   },
     card:{
       width: 150,
@@ -94,11 +97,11 @@ const styles = StyleSheet.create({
       paddingTop: 10
     },
     subtitulo:{
-      fontSize: 20,
+      fontSize: 22,
       color: 'black'
     },
     valor: {
-      fontSize: 18,
+      fontSize: 20,
       color: '#FF005C'
     }
 });

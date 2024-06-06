@@ -6,8 +6,6 @@ import Setor from '../../componentes/Setor/Index';
 
 
 const Evento = () => {
-  const [text, onChangeText] = React.useState('');
-  const [selectedLanguage, setSelectedLanguage] = React.useState('');
 
   return (
     <>
@@ -27,7 +25,15 @@ const Evento = () => {
           </ImageBackground>
       </View>  
 
-      <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 15}}>
+      <View style={styles.infos}>
+        <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>Informações do Campeonato{/* Ao inves de ser estatico deve trazer se é CAMPEONATO ou EVENTO após o "informações do" */}</Text>
+        <View style={{display: 'flex', gap: 5}}>
+          <Text style={styles.subinfo}>Local: Ibirapuera, São Paulo, São Paulo</Text>
+          <Text style={styles.subinfo}>Data(s): 15 de Junho - 16 de Junhos</Text>
+        </View>
+      </View>
+
+      <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 15, paddingBottom: 80}}>
         <Setor titulo="Pista Premium" valorint="300,00" valormeia="150,00"></Setor>
         <Setor titulo="Arquibancada" valorint="150,00" valormeia="75,00"></Setor>
       </View>
@@ -53,6 +59,16 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems:'center',
     width: '100%',
+  },
+  infos:{
+     padding: 15,
+    display: 'flex',
+    gap: 5,
+    marginBottom: 20
+  },
+  subinfo:{
+    color: 'white',
+    fontSize: 16
   },
   titulo: {
     color: '#fff',
