@@ -1,16 +1,13 @@
 import { View, Text, Button, StyleSheet, Image, ImageBackground, TextInput, ScrollView} from 'react-native'
 import React from 'react'
-import { useNavigation } from '@react-navigation/native'
+import CounterInput from "react-native-counter-input";
 import { StatusBar } from 'expo-status-bar';
-import { IconButton } from 'react-native-paper';
-import Card from '../../componentes/Card/Index';
-import {Picker} from '@react-native-picker/picker';
+import Setor from '../../componentes/Setor/Index';
 
 
 const Evento = () => {
   const [text, onChangeText] = React.useState('');
-const [selectedLanguage, setSelectedLanguage] = React.useState('');
-
+  const [selectedLanguage, setSelectedLanguage] = React.useState('');
 
   return (
     <>
@@ -20,23 +17,22 @@ const [selectedLanguage, setSelectedLanguage] = React.useState('');
       <View style={styles.header}>
         <Text style={styles.branco}>Cyber<Text style={styles.rosa}>Pass</Text></Text>
       </View>
+
       <ScrollView style={{width: '100%'}}>
-        <View style={styles.cardimagem}>
+
+      <View style={styles.cardimagem}>
           <ImageBackground source={require('../../../assets/valorantestadio.jpg')} resizeMode='cover' style={styles.image}>
             <Text style={styles.titulo}>Valorant Masters</Text>
             <Text style={styles.subtitulo}>Presencie os melhores jogadores de valorant em busca do grande título!</Text>
           </ImageBackground>
-        </View>  
+      </View>  
 
-        <Picker style={{backgroundColor: 'white', borderWidth: 5, borderColor: 'blue', borderRadius: 15, width: '80%'}}
-        placeholder='Setor'
-        selectedValue={selectedLanguage}
-        onValueChange={(itemValue, itemIndex) =>
-          setSelectedLanguage(itemValue)
-        }>
-        <Picker.Item label="Java" value="java" />
-        <Picker.Item label="JavaScript" value="js" />
-</Picker>
+      <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 15}}>
+        <Setor titulo="Pista Premium" valorint="300,00" valormeia="150,00"></Setor>
+        <Setor titulo="Arquibancada" valorint="150,00" valormeia="75,00"></Setor>
+      </View>
+
+
         </ScrollView>
     </ImageBackground>
 
