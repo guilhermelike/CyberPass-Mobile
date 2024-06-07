@@ -19,6 +19,9 @@ public class Event {
     private String location;
 
     @Column(nullable = false, length = 255)
+    private  String image;
+
+    @Column(nullable = false, length = 255)
     private String city;
 
     @Column(nullable = false)
@@ -26,7 +29,11 @@ public class Event {
     private Date date;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal price;
+    private BigDecimal priceinteira;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal pricemeia;
+
 
     @Column(nullable = false)
     private int quantityInteira;
@@ -39,7 +46,6 @@ public class Event {
 
     @Column(nullable = false)
     private boolean championship;
-
     // Getters and Setters
 
     public Long getId() {
@@ -56,6 +62,14 @@ public class Event {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getLocation() {
@@ -82,12 +96,20 @@ public class Event {
         this.date = date;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getPriceInteira() {
+        return priceinteira;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setPriceInteira(BigDecimal priceinteira) {
+        this.priceinteira = priceinteira;
+    }
+
+    public BigDecimal getPriceMeia() {
+        return pricemeia;
+    }
+
+    public void setPriceMeia(BigDecimal pricemeia) {
+        this.pricemeia = pricemeia;
     }
 
     public int getQuantityInteira() {
