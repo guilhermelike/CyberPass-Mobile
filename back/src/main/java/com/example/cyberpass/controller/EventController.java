@@ -12,6 +12,7 @@ public class EventController {
     @Autowired
     EventService eventService;
 
+    @CrossOrigin(origins = "exp://192.168.26.208:8081")
     @GetMapping("/events")
     public List<Event> getAllEvents()
     {
