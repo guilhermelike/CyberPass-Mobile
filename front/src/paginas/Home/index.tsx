@@ -3,13 +3,22 @@ import React, { useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import { IconButton } from 'react-native-paper';
 import Card from '../../componentes/Card/Index';
-import api from '../../../api';
 import { EventData } from '../../interface/EventDat';
 import { useEventData } from '../../hooks/useEventData';
 
 const Home = ({navigation}) => {
   const [text, onChangeText] = React.useState('');
   const { data } = useEventData();
+  const isChampionship = data?.filter(eventData => eventData.championship === true);
+  const isEvent = data?.filter(eventData => eventData.championship === false);
+  const groupedByCity = data?.reduce((acc, eventData) => {
+    const city = eventData.city;
+    if (!acc[city]) {
+      acc[city] = [];
+    }
+    acc[city].push(eventData);
+    return acc;
+  }, {});
 
   return (
     <>
@@ -35,21 +44,25 @@ const Home = ({navigation}) => {
             <View style={styles.containercard}>
               <ScrollView horizontal={true} contentContainerStyle={{display: 'flex', gap: 20, justifyContent: 'space-between'}}>
                 
-                {data?.map(eventData => 
-                <Card 
-                titulo={eventData.name} 
-                data={eventData.date} 
-                imagemUri={eventData.image}>
-
-                </Card>)}
+              {isChampionship?.map((eventData) => (
+                <TouchableOpacity onPress={() => navigation.navigate("Evento")}>
+                  <Card
+                    key={eventData.id}
+                    titulo={eventData.name}
+                    imagemUri={eventData.image}
+                    data={eventData.date}
+                    onPress={()=> navigation.navigate("Evento")}
+                  />
+                  </TouchableOpacity>
+                ))}
                 
                 {/*
                 <TouchableOpacity onPress={() => navigation.navigate("Evento")}>
-                <Card titulo="Valorant" data="15 Jun - 18 Jun" imagemUri={require("../../../assets/valorant.png")} onPress={() => navigation.navigate("Evento")}></Card>
+                <Card titulo="Valorant" data="15 Jun - 18 Jun"  onPress={() => navigation.navigate("Evento")}></Card>
                 </TouchableOpacity>
 
-                <Card navigation={navigation} titulo="IEM Rio 2024" data="11 Out - 13 Out" imagemUri={require("../../../assets/iem.png")}></Card>
-                <Card titulo="CBLOL" data="23 Ago" imagemUri={require("../../../assets/cblol.png")}></Card>
+                <Card navigation={navigation} titulo="IEM Rio 2024" data="11 Out - 13 Out" ></Card>
+                <Card titulo="CBLOL" data="23 Ago"></Card>
                 <Card titulo="GET Rio" data="02 Set - 03 Set" imagemUri={require("../../../assets/get.png")}></Card>
                */}
               </ScrollView>
@@ -60,38 +73,44 @@ const Home = ({navigation}) => {
             <Text style={styles.textcamp}>Eventos</Text>
             <View style={styles.containercard}>
               <ScrollView horizontal={true} contentContainerStyle={{display: 'flex', gap: 20, justifyContent: 'space-between'}}>
-                <Card titulo="Show do Gordox" data="11 Dez" imagemUri={require("../../../assets/gordox.png")}></Card>
-                <Card titulo="Show do Gordox" data="11 Dez" imagemUri={require("../../../assets/gordox.png")}></Card>
-                <Card titulo="Show do Gordox" data="11 Dez" imagemUri={require("../../../assets/gordox.png")}></Card>
-                <Card titulo="Show do Gordox" data="11 Dez" imagemUri={require("../../../assets/gordox.png")}></Card>
+                {isEvent?.map((eventData) => (
+                  <TouchableOpacity onPress={() => navigation.navigate("Evento")}>
+                    <Card
+                      key={eventData.id}
+                      titulo={eventData.name}
+                      imagemUri={eventData.image}
+                      data={eventData.date}
+                      onPress={()=> navigation.navigate("Evento")}
+                    />
+                  </TouchableOpacity>
+              ))}
               </ScrollView>
             </View>
             
           </View>
 
           <View style={styles.campeonatos}>
-            <Text style={styles.textcamp}>Cidades</Text>
-            <Text style={styles.subcamp}>Rio de Janeiro</Text>
+            <Text style={styles.textcamp2}>Cidades</Text>
+            {groupedByCity && Object.keys(groupedByCity).map((city) => (
+            <View key={city}>
+            <Text style={styles.subcamp}>{city}</Text>
             <View style={styles.containercard}>
+              {groupedByCity[city].map((eventData: { championship: any; id: any; name: any; image: any; date: any; }) => (
               <ScrollView horizontal={true} contentContainerStyle={{display: 'flex', gap: 20, justifyContent: 'space-between'}}>
-                <Card titulo="Valorant" data="15 Jun - 18 Jun" imagemUri={require("../../../assets/valorant.png")}></Card>
-                <Card titulo="IEM Rio 2024" data="11 Out - 13 Out" imagemUri={require("../../../assets/iem.png")}></Card>
-                <Card titulo="CBLOL" data="23 Ago" imagemUri={require("../../../assets/cblol.png")}></Card>
-                <Card titulo="GET Rio" data="02 Set - 03 Set" imagemUri={require("../../../assets/get.png")}></Card>
+                <Card
+                  key={eventData.id}
+                  titulo={eventData.name}
+                  imagemUri={eventData.image}
+                  data={eventData.date}
+                />
               </ScrollView>
-
+              )
+            )}
+                
+              </View>
             </View>
 
-            <Text style={styles.subcamp2}>São Paulo</Text>
-            <View style={styles.containercard2}>
-              <ScrollView horizontal={true} contentContainerStyle={{display: 'flex', gap: 20, justifyContent: 'space-between'}}>
-                <Card titulo="Valorant" data="15 Jun - 18 Jun" imagemUri={require("../../../assets/valorant.png")}></Card>
-                <Card titulo="IEM Rio 2024" data="11 Out - 13 Out" imagemUri={require("../../../assets/iem.png")}></Card>
-                <Card titulo="CBLOL" data="23 Ago" imagemUri={require("../../../assets/cblol.png")}></Card>
-                <Card titulo="GET Rio" data="02 Set - 03 Set" imagemUri={require("../../../assets/get.png")}></Card>
-              </ScrollView>
-
-            </View>
+            ))}
           
           </View>
           </ImageBackground>
@@ -143,9 +162,16 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10
   },
+  textcamp2:{
+    color:'white',
+    fontSize: 22,
+    fontWeight: '500',
+    marginTop: 10,
+  },
   subcamp:{
     color:'white',
-    fontSize: 20
+    fontSize: 20,
+    marginTop: 10,
   },
   subcamp2:{
     color:'white',

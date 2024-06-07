@@ -2,7 +2,7 @@ export interface EventData{
     id: Number,
     available: Boolean,
     championship: Boolean,
-    city: String,
+    city: any,
     date: Date,
     location: String,
     name: String,
