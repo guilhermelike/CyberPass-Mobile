@@ -17,6 +17,7 @@ import Pedidos from '../paginas/Pedidos';
 import Dados from '../paginas/Dados';
 import Header from '../componentes/Header';
 import Component from 'react-native-paper/lib/typescript/components/List/ListItem';
+import Pagamento from '../paginas/Pagamento';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -63,6 +64,16 @@ function MeuPerfil(){
       );
 }
 
+function FluxoPedido(){
+    return(
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Carrinho" component={Carrinho}/>
+            <Stack.Screen name="Pagamento" component={Pagamento}/>
+            <Stack.Screen name="Login" component={Login}/>
+        </Stack.Navigator>
+    )
+}
+
 function Fluxo(){
     return(
         <Stack.Navigator screenOptions={{headerShown: false}}>
@@ -96,7 +107,7 @@ function TabComponent() {
                 <Ionicons name='home' size={20} color={TintColor}/>
             )
         }}></Tab.Screen>
-        <Tab.Screen name='Carrinho' component={Carrinho}
+        <Tab.Screen name='FluxoPedido' component={FluxoPedido}
         options={{
             tabBarIcon: ({color:TintColor}) => (
                 <Ionicons name='cart' size={20} color={TintColor}/>

@@ -12,6 +12,8 @@ const Ingresso = (props: any) => {
             <View style={{display: 'flex', flexDirection: 'row', gap: 5}}>    
               <Text style={styles.info}>{props.qtd}</Text>
               <Text>-</Text>
+              <Text style={styles.info}>{props.tipo}</Text>
+              <Text>-</Text>
               <Text style={styles.info}>{props.valor}</Text>
             </View>
           </View>
