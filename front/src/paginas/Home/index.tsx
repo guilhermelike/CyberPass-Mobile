@@ -1,12 +1,15 @@
 import { View, Text, Button, StyleSheet, Image, ImageBackground, TextInput, ScrollView, TouchableOpacity} from 'react-native'
-import React from 'react'
-import { useNavigation } from '@react-navigation/native'
+import React, { useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import { IconButton } from 'react-native-paper';
 import Card from '../../componentes/Card/Index';
+import api from '../../../api';
+import { EventData } from '../../interface/EventDat';
+import { useEventData } from '../../hooks/useEventData';
 
 const Home = ({navigation}) => {
   const [text, onChangeText] = React.useState('');
+  const { data } = useEventData();
 
   return (
     <>
@@ -31,6 +34,16 @@ const Home = ({navigation}) => {
             <Text style={styles.textcamp}>Campeonatos</Text>
             <View style={styles.containercard}>
               <ScrollView horizontal={true} contentContainerStyle={{display: 'flex', gap: 20, justifyContent: 'space-between'}}>
+                
+                {data?.map(eventData => 
+                <Card 
+                titulo={eventData.name} 
+                data={eventData.date} 
+                imagemUri={eventData.image}>
+
+                </Card>)}
+                
+                {/*
                 <TouchableOpacity onPress={() => navigation.navigate("Evento")}>
                 <Card titulo="Valorant" data="15 Jun - 18 Jun" imagemUri={require("../../../assets/valorant.png")} onPress={() => navigation.navigate("Evento")}></Card>
                 </TouchableOpacity>
@@ -38,6 +51,7 @@ const Home = ({navigation}) => {
                 <Card navigation={navigation} titulo="IEM Rio 2024" data="11 Out - 13 Out" imagemUri={require("../../../assets/iem.png")}></Card>
                 <Card titulo="CBLOL" data="23 Ago" imagemUri={require("../../../assets/cblol.png")}></Card>
                 <Card titulo="GET Rio" data="02 Set - 03 Set" imagemUri={require("../../../assets/get.png")}></Card>
+               */}
               </ScrollView>
             </View>
           </View>
