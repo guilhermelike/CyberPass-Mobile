@@ -31,7 +31,7 @@ const Home = ({navigation}) => {
       <ScrollView>
         <ImageBackground source={require('../../../assets/image2.png')} resizeMode='cover' style={styles.image}>
           <Text style={styles.titulo}>A Casa dos Esports</Text>
-          <Text style={styles.subtitulo}>Por quê assistir de casa quando você pode <Text style={{color: '#FF005C', fontWeight: '400'}}>vivenciar</Text></Text>
+          <Text style={styles.subtitulo}>Por que assistir de casa quando você pode <Text style={{color: '#FF005C', fontWeight: '400'}}>vivenciar</Text></Text>
           <View style={styles.inputicon}>
             <TextInput style={styles.input} onChangeText={onChangeText} value={text} placeholder='IEM Rio'></TextInput>
             <IconButton style={styles.icon} size={31.5} iconColor='black' icon="search-web" onPress={() => alert('trabalha pietrao')}></IconButton>
