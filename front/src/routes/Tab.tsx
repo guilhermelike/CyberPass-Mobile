@@ -18,6 +18,7 @@ import Dados from '../paginas/Dados';
 import Header from '../componentes/Header';
 import Component from 'react-native-paper/lib/typescript/components/List/ListItem';
 import Pagamento from '../paginas/Pagamento';
+import Setor from '../componentes/Setor/Index';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -79,6 +80,7 @@ function Fluxo(){
         <Stack.Navigator screenOptions={{headerShown: false}}>
             <Stack.Screen name="Home" component={Home}/>
             <Stack.Screen name="Evento" component={Evento}/>
+            <Stack.Screen name="Carrinho" component={Carrinho}/>
         </Stack.Navigator>
     )
 }

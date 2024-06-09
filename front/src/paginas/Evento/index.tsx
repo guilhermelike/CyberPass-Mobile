@@ -1,11 +1,43 @@
 import { View, Text, Button, StyleSheet, Image, ImageBackground, TextInput, ScrollView} from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CounterInput from "react-native-counter-input";
 import { StatusBar } from 'expo-status-bar';
 import Setor from '../../componentes/Setor/Index';
+import { useRoute } from '@react-navigation/native';
+import axios from 'axios';
+import { format, parseISO } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 
-const Evento = () => {
+const Evento = ({navigation}) => {
+  const route = useRoute();
+  const eventId = route.params?.eventId;
+
+  const [eventData, setEventData] = useState(null);
+
+  useEffect(() => {
+    if (eventId) {
+      axios.get(`http://192.168.18.7:8080/events/${eventId}`)
+      .then(response => {
+        setEventData(response.data);
+      })
+      .catch(error => {
+        console.error('Erro ao buscar detalhes do evento:', error);
+      });
+  }
+}, [eventId]); // Executa o efeito sempre que o eventId mudar
+
+if (!eventData) {
+  return (
+    <View>
+      <Text>Carregando...</Text>
+    </View>
+  );
+}
+
+const capitalizeFirstLetter = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
   return (
     <>
@@ -19,8 +51,8 @@ const Evento = () => {
       <ScrollView style={{width: '100%'}}>
 
       <View style={styles.cardimagem}>
-          <ImageBackground source={require('../../../assets/valorantestadio.jpg')} resizeMode='cover' style={styles.image}>
-            <Text style={styles.titulo}>Valorant Masters</Text>
+          <ImageBackground source={{uri: eventData.image}} resizeMode='cover' style={styles.image}>
+            <Text style={styles.titulo}>{eventData.name}</Text>
             <Text style={styles.subtitulo}>Presencie os melhores jogadores de valorant em busca do grande título!</Text>
           </ImageBackground>
       </View>  
@@ -28,14 +60,13 @@ const Evento = () => {
       <View style={styles.infos}>
         <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>Informações do Campeonato{/* Ao inves de ser estatico deve trazer se é CAMPEONATO ou EVENTO após o "informações do" */}</Text>
         <View style={{display: 'flex', gap: 5}}>
-          <Text style={styles.subinfo}>Local: Ibirapuera, São Paulo, São Paulo</Text>
-          <Text style={styles.subinfo}>Data(s): 15 de Junho - 16 de Junhos</Text>
+          <Text style={styles.subinfo}>Local: {eventData.location}, {eventData.city}</Text>
+          <Text style={styles.subinfo}>Data(s): {format(parseISO(eventData.date), "EEEE, dd 'de' MMMM 'de' yyyy", { locale: ptBR }).replace(/^\w/, (c) => c.toUpperCase())}</Text>
         </View>
       </View>
 
       <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 15, paddingBottom: 80}}>
-        <Setor titulo="Pista Premium" valorint="300,00" valormeia="150,00"></Setor>
-        <Setor titulo="Arquibancada" valorint="150,00" valormeia="75,00"></Setor>
+        <Setor titulo="Ingressos" navigation={navigation} quantityInteira={eventData.quantityInteira} quantityMeia={eventData.quantityMeia}  valorint={eventData.priceInteira.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} valormeia={eventData.priceMeia.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} eventData={eventData}></Setor>
       </View>
 
 

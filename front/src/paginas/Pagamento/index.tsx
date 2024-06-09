@@ -69,8 +69,8 @@ const Pagamento = ({navigation}) => {
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{width: '90%', display: 'flex', alignItems: 'center', justifyContent: 'center', alignContent: 'center', flexDirection: 'column', paddingBottom: 80}}> 
           <View style={Styles.fundobranco}>
             <Text style={{paddingLeft: 15, paddingTop: 10, fontSize: 18, fontWeight: 600}}>Informações do pedido</Text>
-            <Ingresso evento="Valorant Masters" local="São Paulo - Ibirapuera" data="09 Maio - 10 Maio" qtd="1 Ingresso" tipo="Inteira" valor="150,00"  imagemUri={require("../../../assets/valorant.png")}></Ingresso>
-            <Ingresso evento="IEM Rio 2024" local="Rio de Janeiro - Arena Jeunesse" data="15 Jun - 18 Jun" qtd="1 Ingresso" valor="150,00" tipo="Meia"  imagemUri={require("../../../assets/iem.png")}></Ingresso>
+            <Ingresso evento="Valorant Masters" local="São Paulo - Ibirapuera" data="09 Maio - 10 Maio" qtd="1 Ingresso" tipo="Inteira" valor="150,00"></Ingresso>
+            <Ingresso evento="IEM Rio 2024" local="Rio de Janeiro - Arena Jeunesse" data="15 Jun - 18 Jun" qtd="1 Ingresso" valor="150,00" tipo="Meia"></Ingresso>
             
             <View style={{display: 'flex', flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, paddingHorizontal: 15, paddingVertical: 10, borderTopWidth: 1,}}>
               

@@ -1,17 +1,49 @@
 import { View, Text, Image, StyleSheet, TouchableHighlight, TouchableOpacity} from 'react-native'
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import CounterInput from 'react-native-counter-input';
 import { Button, IconButton } from 'react-native-paper';
+import CustomCounter from '../CustomCounter';
 
 const Setor = (props: any) => {
   const [showButton, setShowButton] = React.useState(false);
+  const [inteira, setInteira] = useState(props.quantityInteira);
+  const [meia, setMeia] = useState(props.quantityMeia);
+  const [quantidadeInteira, setQuantidadeInteira] = useState(0);
+  const [quantidadeMeia, setQuantidadeMeia] = useState(0);
+  const { eventData} = props;
 
   const handleCounterChange = (counter) => {
     console.log("onChange Counter:", counter);
     setShowButton(counter > 0);
   };
 
+  useEffect(() => {
+    setInteira(props.quantityInteira);
+    setMeia(props.quantityMeia);
+  }, [props.quantityInteira, props.quantityMeia]);
+
+  const handleInteiraChange = (count: number) => {
+    if (count <= props.quantityInteira) {
+      setInteira(count);
+    }
+  };
+
+  const handleMeiaChange = (count: number) => {
+    if (count <= props.quantityMeia) {
+      setMeia(count);
+    }
+  };
+
+  const handleInteiraChangeText = (text) => {
+    if (!/^\d+$/.test(text)) {
+    setQuantidadeInteira((prev) => prev);
+    }
+  };
+
+  const handleMeiaChangeText = () => {
+    setQuantidadeMeia((prev) => prev);
+  };
 
   return (
     <>
@@ -20,6 +52,7 @@ const Setor = (props: any) => {
         <Text style={styles.titulo}>{props.titulo}</Text>
       </View>
 
+    {props.quantityInteira > 0 ? (
       <View style={styles.ingresso}>
         <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5}}>
             <Text style={styles.subtitulo}>Inteira</Text>
@@ -27,9 +60,29 @@ const Setor = (props: any) => {
             <Text style={styles.valor}>{props.valorint}</Text>
           </View>
 
-          <CounterInput onChange={handleCounterChange} min={0} horizontal={true} increaseButtonBackgroundColor="#FF005C" decreaseButtonBackgroundColor="#FF005C" reverseCounterButtons={true} style={styles.counter}/>
+          <CustomCounter
+              value={quantidadeInteira}
+              onChange={(count) => {
+                setQuantidadeInteira(count);
+                handleCounterChange(count);
+              }}
+              min={0}
+              max={3}
+              increaseButtonBackgroundColor={"#FF005C"}
+              decreaseButtonBackgroundColor={"#FF005C"}
+            />
         </View>
+    ) : (
+      <View style={styles.ingresso}>
+        <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5}}>
+            <Text style={styles.subtitulo}>Inteira</Text>
+            <Text style={styles.subtitulo}>-</Text>
+            <Text style={styles.valor}>Ingressos esgotados!</Text>
+          </View>
+        </View>
+    )}
 
+    {props.quantityMeia > 0 ? (
         <View style={styles.ingresso}>
           <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5}}>
             <Text style={styles.subtitulo}>Meia</Text>
@@ -37,13 +90,33 @@ const Setor = (props: any) => {
             <Text style={styles.valor}>{props.valormeia}</Text>
           </View>
 
-          <CounterInput onChange={handleCounterChange} min={0} horizontal={true} increaseButtonBackgroundColor="#FF005C" decreaseButtonBackgroundColor="#FF005C" reverseCounterButtons={true} style={styles.counter}/>
+          <CustomCounter
+              value={quantidadeMeia}
+              onChange={(count) => {
+                setQuantidadeMeia(count);
+                handleCounterChange(count);
+              }}
+              min={0}
+              max={3}
+              increaseButtonBackgroundColor={"#FF005C"}
+              decreaseButtonBackgroundColor={"#FF005C"}
+            />
 
         </View>
-
+      ) : (
+      <View style={styles.ingresso}>
+        <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 5}}>
+            <Text style={styles.subtitulo}>Meia</Text>
+            <Text style={styles.subtitulo}>-</Text>
+            <Text style={styles.valor}>Ingressos esgotados!</Text>
+          </View>
+        </View>
+)}
     </View>
+    
     {showButton && (
-       <TouchableOpacity style={styles.botao} onPress={() => console.log('Botão Pressionado!')}>
+       <TouchableOpacity style={styles.botao} onPress={
+       ()=>props.navigation.navigate("FluxoPedido", {screen: 'Carrinho', params: {newEvent: {eventData: eventData, quantidadeInteira: quantidadeInteira, quantidadeMeia: quantidadeMeia}}})}>
         <Text style={styles.botaoText}>Adicionar ao Carrinho!</Text>
        </TouchableOpacity>
       )}

@@ -42,10 +42,10 @@ const Home = ({navigation}) => {
           <View style={styles.campeonatos}>
             <Text style={styles.textcamp}>Campeonatos</Text>
             <View style={styles.containercard}>
-              <ScrollView horizontal={true} contentContainerStyle={{display: 'flex', gap: 20, justifyContent: 'space-between'}}>
+              <ScrollView horizontal={true} contentContainerStyle={{display: 'flex', gap: 20, paddingRight: 70}} showsHorizontalScrollIndicator={false}>
                 
               {isChampionship?.map((eventData) => (
-                <TouchableOpacity onPress={() => navigation.navigate("Evento")}>
+                <TouchableOpacity onPress={() => navigation.navigate("Evento", { eventId: eventData.id })}>
                   <Card
                     key={eventData.id}
                     titulo={eventData.name}
@@ -72,9 +72,9 @@ const Home = ({navigation}) => {
           <View style={styles.campeonatos}>
             <Text style={styles.textcamp}>Eventos</Text>
             <View style={styles.containercard}>
-              <ScrollView horizontal={true} contentContainerStyle={{display: 'flex', gap: 20, justifyContent: 'space-between'}}>
+              <ScrollView horizontal={true} contentContainerStyle={{display: 'flex', gap: 20, justifyContent: 'space-between', paddingRight: 70}} showsHorizontalScrollIndicator={false}>
                 {isEvent?.map((eventData) => (
-                  <TouchableOpacity onPress={() => navigation.navigate("Evento")}>
+                  <TouchableOpacity onPress={() => navigation.navigate("Evento", { eventId: eventData.id })}>
                     <Card
                       key={eventData.id}
                       titulo={eventData.name}
@@ -95,18 +95,19 @@ const Home = ({navigation}) => {
             <View key={city}>
             <Text style={styles.subcamp}>{city}</Text>
             <View style={styles.containercard}>
+            <ScrollView horizontal={true} contentContainerStyle={{display: 'flex', gap: 20, justifyContent: 'space-between', paddingRight: 70}} showsHorizontalScrollIndicator={false}>
               {groupedByCity[city].map((eventData: { championship: any; id: any; name: any; image: any; date: any; }) => (
-              <ScrollView horizontal={true} contentContainerStyle={{display: 'flex', gap: 20, justifyContent: 'space-between'}}>
-                <Card
-                  key={eventData.id}
-                  titulo={eventData.name}
-                  imagemUri={eventData.image}
-                  data={eventData.date}
-                />
-              </ScrollView>
+                <TouchableOpacity onPress={() => navigation.navigate("Evento", { eventId: eventData.id })}>
+                  <Card
+                    key={eventData.id}
+                    titulo={eventData.name}
+                    imagemUri={eventData.image}
+                    data={eventData.date}
+                  />
+                </TouchableOpacity>
               )
             )}
-                
+              </ScrollView>
               </View>
             </View>
 

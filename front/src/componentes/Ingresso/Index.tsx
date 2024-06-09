@@ -4,18 +4,26 @@ import React from 'react'
 const Ingresso = (props: any) => {
     return (
       <View style={styles.container}>
-          <Image style={styles.card} source={props.imagemUri}></Image>
+          <Image style={styles.card} source={{uri: props.imagemUri}}></Image>
           <View style={{display: 'flex', flexDirection: 'column'}}>
             <Text style={styles.evento}>{props.evento}</Text>
-            <Text style={styles.info}>{props.local}</Text>
+            <Text style={styles.info}>{props.local}, {props.cidade}</Text>
             <Text style={styles.info}>{props.data}</Text>
-            <View style={{display: 'flex', flexDirection: 'row', gap: 5}}>    
-              <Text style={styles.info}>{props.qtd}</Text>
-              <Text>-</Text>
-              <Text style={styles.info}>{props.tipo}</Text>
-              <Text>-</Text>
-              <Text style={styles.info}>{props.valor}</Text>
-            </View>
+            {props.qtdInteira > 0 && (
+          <View style={{ display: 'flex', flexDirection: 'row', gap: 5 }}>
+            <Text style={styles.info}>{props.qtdInteira} Inteira</Text>
+            <Text>-</Text>
+            <Text style={styles.info}>{props.valorInt}</Text>
+          </View>
+        )}
+
+        {props.qtdMeia > 0 && (
+          <View style={{ display: 'flex', flexDirection: 'row', gap: 5 }}>
+            <Text style={styles.info}>{props.qtdMeia} Meia</Text>
+            <Text>-</Text>
+            <Text style={styles.info}>{props.valorMeia}</Text>
+          </View>
+        )}
           </View>
       </View>
     )

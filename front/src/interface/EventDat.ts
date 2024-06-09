@@ -6,10 +6,10 @@ export interface EventData{
     date: Date,
     location: String,
     name: String,
-    priceinteira: Number,
-    pricemeia: Number,
-    quantity_inteira: Number,
-    quantity_meia: Number,
+    priceInteira: Number,
+    priceMeia: Number,
+    quantityInteira: Number,
+    quantityMeia: Number,
     image: String
 
 
