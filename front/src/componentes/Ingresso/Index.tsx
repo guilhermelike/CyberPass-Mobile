@@ -32,7 +32,7 @@ const Ingresso = (props: any) => {
   const styles = StyleSheet.create({
       card:{
         width: 90,
-        height: 90,
+        height: '100%',
         borderRadius: 5
       },
       container:{
