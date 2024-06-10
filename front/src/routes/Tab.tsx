@@ -40,16 +40,17 @@ function Usuario(){
     return(
         <Stack.Navigator screenOptions={{headerShown: false}}>
             {/* É NECESSÁRIO ALTERAR A ORDEM, ESTÁ AO CONTRÁRIO PARA SER POSSÍVEL FAZER AS TELAS DE USUÁRIO LOGADO*/}
-            {user ? ( 
+            {user ? (
                 <>
-                    <Stack.Screen name="Login" component={Home} />
-                    <Stack.Screen name="Cadastro" component={Cadastro} />
-                </>
+                <Stack.Screen name="CyberPass" component={MeuPerfil} options={{headerShown: true, headerTitleAlign: 'center', headerStyle:{backgroundColor: 'black'}, headerTintColor: 'white', 
+                headerTitle: (props) => <HeaderTitle {...props}>Pass</HeaderTitle>,
+            }}/>
+            </>
+                
             ) : (
                 <>
-                    <Stack.Screen name="CyberPass" component={MeuPerfil} options={{headerShown: true, headerTitleAlign: 'center', headerStyle:{backgroundColor: 'black'}, headerTintColor: 'white', 
-                    headerTitle: (props) => <HeaderTitle {...props}>Pass</HeaderTitle>,
-                }}/>
+                    <Stack.Screen name="Login" component={Login} />
+                    <Stack.Screen name="Cadastro" component={Cadastro} />
                 </>
             )}
         </Stack.Navigator>
