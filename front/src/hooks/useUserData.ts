@@ -1,18 +1,18 @@
 import axios, { AxiosPromise, AxiosResponse } from "axios"
-import { EventData } from "../interface/EventData";
+import { UserData } from "../interface/UserData";
 import { useQuery } from "@tanstack/react-query";
 
 const API_URL = "http://localhost:8080";
 
-const fetchData = async (): Promise<AxiosResponse<EventData[]>> => {
-    const response = await axios.get<EventData[]>(API_URL + '/events');
+const fetchData = async (): Promise<AxiosResponse<UserData[]>> => {
+    const response = await axios.get<UserData[]>(API_URL + '/users');
     return response;
   };
 
-export function useEventData(){
+export function useUserData(){
     const query = useQuery({
         queryFn: fetchData,
-        queryKey: ['event-data'],
+        queryKey: ['user-data'],
         retry: 2
     })
 

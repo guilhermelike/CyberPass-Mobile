@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import { IconButton } from 'react-native-paper';
 import Card from '../../componentes/Card/Index';
-import { EventData } from '../../interface/EventDat';
+import { EventData } from '../../interface/EventData';
 import { useEventData } from '../../hooks/useEventData';
 
 const Home = ({navigation}) => {

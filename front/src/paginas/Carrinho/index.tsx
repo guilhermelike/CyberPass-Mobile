@@ -31,7 +31,7 @@ const Carrinho = ({navigation, route}) => {
   }, 0);
 
   const temIngresso = eventos.length > 0;
-  const isLoggedIn = true;
+  const isLoggedIn = false;
 
   if (temIngresso && isLoggedIn){
   return (
