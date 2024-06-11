@@ -19,7 +19,13 @@ public class Event {
     private String location;
 
     @Column(nullable = false, length = 255)
-    private  String image;
+    private String image;
+
+    @Column(nullable = false, length = 255)
+    private String backgroundImage;
+
+    @Column(nullable = false, length = 255)
+    private String eventDescription;
 
     @Column(nullable = false, length = 255)
     private String city;
@@ -34,7 +40,6 @@ public class Event {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal pricemeia;
 
-
     @Column(nullable = false)
     private int quantityInteira;
 
@@ -46,6 +51,7 @@ public class Event {
 
     @Column(nullable = false)
     private boolean championship;
+
     // Getters and Setters
 
     public Long getId() {
@@ -55,7 +61,6 @@ public class Event {
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getName() {
         return name;
     }
@@ -70,6 +75,22 @@ public class Event {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    public void setBackgroundImage(String backgroundImage) {
+        this.backgroundImage = backgroundImage;
+    }
+
+    public String getEventDescription() {
+        return eventDescription;
+    }
+
+    public void setEventDescription(String eventDescription) {
+        this.eventDescription = eventDescription;
     }
 
     public String getLocation() {

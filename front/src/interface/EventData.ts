@@ -10,7 +10,7 @@ export interface EventData{
     priceMeia: Number,
     quantityInteira: Number,
     quantityMeia: Number,
-    image: String
-
-
+    image: String,
+    backgroundImage: String,
+    eventDescription: String
 }

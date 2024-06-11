@@ -2,10 +2,18 @@ import { View, Text, StatusBar, StyleSheet, TextInput, Image, ScrollView, ImageB
 import React, { useState } from 'react'
 import { Button } from 'react-native-paper'
 import { TextInputMask } from 'react-native-masked-text'
+import { useRoute } from '@react-navigation/native'
 
 const Cadastro = ({navigation}) => {
   const [cpf, setCpf] = useState('');
   const [data, setData] = useState('');
+
+  const route = useRoute();
+  const { a } = route.params;
+
+ function dale(){
+  console.log("AGORA FOI = " + a);
+ }
 
   return (
     <>
@@ -13,7 +21,7 @@ const Cadastro = ({navigation}) => {
     <ScrollView>
       <View style={styles.container}>
         <ImageBackground source={require('../../../assets/background.png')} resizeMode='cover' style={{display: 'flex', alignItems: 'center', width: '100%'}}>
-
+          <Button onPress={dale}>dale</Button>
           <View style={styles.header}>
             <Text style={styles.branco}>Cyber<Text style={styles.rosa}>Pass</Text></Text>
           </View>

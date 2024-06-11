@@ -1,5 +1,5 @@
 import axios, { AxiosPromise, AxiosResponse } from "axios"
-import { EventData } from "../interface/EventDat";
+import { EventData } from "../interface/EventData";
 import { useQuery } from "@tanstack/react-query";
 
 const API_URL = "http://192.168.26.208:8080";

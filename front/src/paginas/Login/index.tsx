@@ -1,10 +1,51 @@
-import { View, Text, StatusBar, StyleSheet, TextInput, Image, ImageBackground} from 'react-native'
-import React from 'react'
+import { View, Text, StatusBar, StyleSheet, TextInput, Image, ImageBackground, Alert} from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { Button } from 'react-native-paper'
-import { Link, useNavigation } from '@react-navigation/native';
+import { Link, useNavigation, useRoute } from '@react-navigation/native';
 import Cadastro from '../Cadastro';
+import axios from 'axios';
+import { UserData } from '../../interface/UserData';
 
 const Login = ({navigation}) => {
+  
+    const [userData, setUserData] = useState<UserData | null>(null);
+
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const a = "oiii";
+
+    //const { login } = useAuth();
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/users');
+            setUserData(response.data);
+        } catch (error: any) {
+            console.error('Error:', error);
+        }
+    };
+
+    fetchData();
+    }, []);
+  
+  if (!userData) {
+    return (
+      <View>
+        <Text>Carregando...</Text>
+      </View>
+    );
+  }
+
+  const handleSubmit = async () => {
+    try {
+        //await login(username, password);
+        console.log("login = " + username);
+    } catch (err) {
+        Alert.alert('Login failed', 'Invalid username or password');
+    }
+};
+
   return (
     <>
     <StatusBar></StatusBar>
@@ -23,12 +64,27 @@ const Login = ({navigation}) => {
         <View style={{marginTop: 50, display: 'flex', gap: 10}}>
           <View style={styles.campo}>
             <Text style={styles.label}>Email:</Text>
-            <TextInput textContentType='emailAddress' style={styles.input} placeholder='triplogamer@gmail.com'></TextInput>
+            <TextInput 
+              textContentType='emailAddress' 
+              style={styles.input} 
+              placeholder='Digite seu e-mail'
+              value={username}
+              onChangeText={setUsername}
+            >
+            </TextInput>
           </View>
 
           <View style={styles.campo}>
-            <Text style={styles.label}>Senha:</Text>
-            <TextInput secureTextEntry={true} textContentType='password' style={styles.input} placeholder='Senha123'></TextInput>
+            <Text style={styles.label} id='senha'>Senha:</Text>
+            <TextInput 
+              secureTextEntry={true} 
+              textContentType='password'
+              style={styles.input} 
+              placeholder='Digite sua senha'
+              value={password}
+              onChangeText={setPassword}
+            >
+            </TextInput>
             
             <View style={styles.recuperar}>
               <View>
@@ -40,12 +96,12 @@ const Login = ({navigation}) => {
             </View>
 
             <View style={styles.botao}>
-              <Button style={styles.botao2} textColor='white' labelStyle={{fontSize: 18}}>Login</Button>
+              <Button onPress={handleSubmit} style={styles.botao2} textColor='white' labelStyle={{fontSize: 18}}>Login</Button>
             </View>
 
             <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 10}}>
               <Text style={styles.branco4}>Ainda não possui cadastro?</Text>
-              <Text style={styles.rosa3} onPress={() => navigation.navigate("Cadastro")}>Cadastre-se</Text>
+              <Text style={styles.rosa3} onPress={() => navigation.navigate("Cadastro", { a: 'adadadsd' })}>Cadastre-se</Text>
             </View>
           </View>
         </View>
@@ -159,3 +215,7 @@ branco4:{
 })
 
 export default Login;
+
+function useAuth(): { login: any; } {
+  throw new Error('Function not implemented.');
+}

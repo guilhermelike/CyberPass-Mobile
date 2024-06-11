@@ -51,9 +51,9 @@ const capitalizeFirstLetter = (str: string) => {
       <ScrollView style={{width: '100%'}}>
 
       <View style={styles.cardimagem}>
-          <ImageBackground source={{uri: eventData.image}} resizeMode='cover' style={styles.image}>
+          <ImageBackground source={{uri: eventData.backgroundImage}} resizeMode='cover' style={styles.image}>
             <Text style={styles.titulo}>{eventData.name}</Text>
-            <Text style={styles.subtitulo}>Presencie os melhores jogadores de valorant em busca do grande título!</Text>
+            <Text style={styles.subtitulo}>{eventData.eventDescription}</Text>
           </ImageBackground>
       </View>  
 
