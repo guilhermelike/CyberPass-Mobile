@@ -19,6 +19,7 @@ import Header from '../componentes/Header';
 import Component from 'react-native-paper/lib/typescript/components/List/ListItem';
 import Pagamento from '../paginas/Pagamento';
 import Setor from '../componentes/Setor/Index';
+import { CarrinhoContext, CarrinhoProvider, useCarrinho } from './CarrinhoContext';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -87,6 +88,8 @@ function Fluxo(){
 }
 
 function TabComponent() {
+    const { eventos } = useCarrinho();
+    
   return (
       <Tab.Navigator
        screenOptions={{
@@ -115,7 +118,7 @@ function TabComponent() {
             tabBarIcon: ({color:TintColor}) => (
                 <Ionicons name='cart' size={20} color={TintColor}/>
             ),
-            tabBarBadge:1
+            tabBarBadge: eventos.length > 0 ? eventos.length : null,
         }}></Tab.Screen>
         <Tab.Screen name='Usuário' component={Usuario}
         options={{
@@ -130,9 +133,11 @@ function TabComponent() {
 
 export default function Navigation() {
     return (
-        <NavigationContainer>
-            <TabComponent />
-        </NavigationContainer>
+        <CarrinhoProvider>
+            <NavigationContainer>
+                <TabComponent />
+            </NavigationContainer>
+        </CarrinhoProvider>
     );
 }
 

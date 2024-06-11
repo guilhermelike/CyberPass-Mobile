@@ -17,7 +17,7 @@ const Evento = ({navigation}) => {
 
   useEffect(() => {
     if (eventId) {
-      axios.get(`http://192.168.18.7:8080/events/${eventId}`)
+      axios.get(`http://192.168.26.208:8080/events/${eventId}`)
       .then(response => {
         setEventData(response.data);
       })

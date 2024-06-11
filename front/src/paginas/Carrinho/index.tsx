@@ -5,24 +5,17 @@ import { useNavigation } from '@react-navigation/native';
 import Ingresso from '../../componentes/Ingresso/Index';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { useCarrinho } from '../../routes/CarrinhoContext';
 
 const Carrinho = ({navigation, route}) => {
   
-  const [eventos, setEventos] = useState([]);
+  const { eventos, adicionarEvento, removerEvento } = useCarrinho();
 
   useEffect(() => {
     if (route.params?.newEvent) {
-      const { newEvent } = route.params;
-      const eventoExiste = eventos.some(evento => evento.eventData.id === newEvent.eventData.id);
-      if (!eventoExiste) {
-      setEventos((prevEventos) => [...prevEventos, newEvent]);
-      }
+      adicionarEvento(route.params.newEvent);
     }
   }, [route.params?.newEvent]);
-
-  const removerEvento = (id) => {
-    setEventos((prevEventos) => prevEventos.filter(evento => evento.eventData.id !== id));
-  };
 
   const valorTotalGeral = eventos.reduce((total, evento) => {
     const valorTotalInteira = evento.quantidadeInteira * evento.eventData.priceInteira;
