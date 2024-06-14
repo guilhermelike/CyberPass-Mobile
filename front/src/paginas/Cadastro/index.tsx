@@ -9,11 +9,8 @@ const Cadastro = ({navigation}) => {
   const [data, setData] = useState('');
 
   const route = useRoute();
-  const { a } = route.params;
-
- function dale(){
-  console.log("AGORA FOI = " + a);
- }
+  const { login } = route.params;
+  const { password } = route.params;
 
   return (
     <>
@@ -21,7 +18,6 @@ const Cadastro = ({navigation}) => {
     <ScrollView>
       <View style={styles.container}>
         <ImageBackground source={require('../../../assets/background.png')} resizeMode='cover' style={{display: 'flex', alignItems: 'center', width: '100%'}}>
-          <Button onPress={dale}>dale</Button>
           <View style={styles.header}>
             <Text style={styles.branco}>Cyber<Text style={styles.rosa}>Pass</Text></Text>
           </View>

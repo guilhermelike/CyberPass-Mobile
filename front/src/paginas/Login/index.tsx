@@ -8,14 +8,11 @@ import { UserData } from '../../interface/UserData';
 
 const Login = ({navigation}) => {
   
-    const [userData, setUserData] = useState<UserData | null>(null);
+    const [userData, setUserData] = useState([]);
 
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const a = "oiii";
 
-    //const { login } = useAuth();
-  
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -37,13 +34,18 @@ const Login = ({navigation}) => {
     );
   }
 
-  const handleSubmit = async () => {
-    try {
-        //await login(username, password);
-        console.log("login = " + username);
-    } catch (err) {
-        Alert.alert('Login failed', 'Invalid username or password');
-    }
+  const handleSubmit = () => {
+    const filteredUser = userData.filter(user => 
+      user.email.toLowerCase() === (username.toLowerCase())
+  );
+    const filteredPassword = userData.filter(user =>
+      user.password.toLowerCase() === (password.toLowerCase())
+  );
+
+  if (filteredUser.length > 0 && filteredPassword.length > 0)
+    console.log("LOGIN CORRETO");
+  else
+    console.log("LOGIN INCORRETO");
 };
 
   return (
@@ -101,7 +103,7 @@ const Login = ({navigation}) => {
 
             <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 10}}>
               <Text style={styles.branco4}>Ainda não possui cadastro?</Text>
-              <Text style={styles.rosa3} onPress={() => navigation.navigate("Cadastro", { a: 'adadadsd' })}>Cadastre-se</Text>
+              <Text style={styles.rosa3} onPress={() => navigation.navigate("Cadastro", { login: username, password: password})}>Cadastre-se</Text>
             </View>
           </View>
         </View>
