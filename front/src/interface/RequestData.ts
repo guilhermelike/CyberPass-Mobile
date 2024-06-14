@@ -1,6 +1,6 @@
 export interface RequestData {
-    id: number,
-    eventId: string,
-    ticketId: string,
-    cpf: string
+    id?: number,
+    event: string,
+    ticket: string,
+    user: string
 }

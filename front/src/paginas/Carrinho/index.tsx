@@ -6,6 +6,9 @@ import Ingresso from '../../componentes/Ingresso/Index';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useCarrinho } from '../../routes/CarrinhoContext';
+import axios from 'axios';
+
+const API_URL = "http://192.168.26.208:8080/requests/";
 
 const Carrinho = ({navigation, route}) => {
   
@@ -23,8 +26,40 @@ const Carrinho = ({navigation, route}) => {
     return total + valorTotalInteira + valorTotalMeia;
   }, 0);
 
+  const handlePagamento = async () => {
+    try {
+      const userId = 1; // Substitua com o CPF real do usuário logado
+      const ticketId = 1; // Substitua com o ticketId real se disponível, e certifique-se que é um número
+  
+      const requests = eventos.map(evento => ({
+          event: { id: evento.eventData.id },
+          user: { id: userId }
+      }));
+  
+      console.log("Enviando dados:", requests);
+  
+      const response = await axios.post(API_URL, requests, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      console.log("Resposta da API:", response.data);
+  
+      // Navegar para a tela de pagamento após a criação do request
+      navigation.navigate("Pagamento", { eventos });
+    } catch (error) {
+      if (error.response) {
+        console.error("Erro ao criar o request:", error.response.data);
+      } else {
+        console.error("Erro ao criar o request:", error.message);
+      }
+    }
+  };
+  
+  
   const temIngresso = eventos.length > 0;
-  const isLoggedIn = false;
+  const isLoggedIn = true;
 
   if (temIngresso && isLoggedIn){
   return (
@@ -83,7 +118,7 @@ const Carrinho = ({navigation, route}) => {
               </View>
             
               <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', paddingBottom: 20}}>
-                  <TouchableOpacity style={{backgroundColor: '#ff005c', padding: 12, borderRadius: 15, width: '80%'}} onPress={()=> navigation.navigate("Pagamento")}>
+                  <TouchableOpacity style={{backgroundColor: '#ff005c', padding: 12, borderRadius: 15, width: '80%'}} onPress={handlePagamento}>
                     <Text style={{color: 'white', textAlign: 'center', fontSize: 17}}>Ir para o pagamento</Text>
                   </TouchableOpacity>
               </View>
