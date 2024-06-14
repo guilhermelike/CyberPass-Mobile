@@ -13,11 +13,6 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public List<User> getAllUsers()
-    {
-        return userRepository.findAll();
-    }
-
     public User getUser(Long id)
     {
         Optional<User> user = userRepository.findById(id);
@@ -28,6 +23,11 @@ public class UserService {
     {
         userRepository.save(user);
         return userRepository.findById(user.getId()).orElse(null);
+    }
+
+    public List<User> getAllUsers()
+    {
+        return userRepository.findAll();
     }
 
     public String removeUser(Long id)

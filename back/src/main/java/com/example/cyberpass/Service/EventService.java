@@ -10,25 +10,22 @@ import java.util.Optional;
 
 @Service
 public class EventService {
-    @Autowired
-    EventRepository eventRepository;
+        @Autowired
+        private EventRepository repository;
 
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
-    }
+        public List<Event> findAll() {
+            return repository.findAll();
+        }
 
-    public Event getEvent(Long id) {
-        Optional<Event> event = eventRepository.findById(id);
-        return event.orElse(null);
-    }
+        public Optional<Event> findById(Long id) {
+            return repository.findById(id);
+        }
 
-    public Event createEvent(Event event) {
-        eventRepository.save(event);
-        return eventRepository.findById(event.getId()).orElse(null);
-    }
+        public Event save(Event event) {
+            return repository.save(event);
+        }
 
-    public String removeEvent(Long id) {
-        eventRepository.deleteById(id);
-        return "Successfully removed the event with id : " + id;
+        public void deleteById(Long id) {
+            repository.deleteById(id);
+        }
     }
-}

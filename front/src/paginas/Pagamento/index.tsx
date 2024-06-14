@@ -1,14 +1,21 @@
 import { View, Text, StyleSheet, ImageBackground, ScrollView, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Ingresso from '../../componentes/Ingresso/Index';
 import { TextInputMask } from 'react-native-masked-text';
 import DropdownComponent from '../../componentes/Dropdown/Index';
 import { Dropdown } from 'react-native-element-dropdown';
+import axios from 'axios';
 
 const isLoggedIn = false;
+const API_URL = "http://192.168.26.208:8080";
 
-const Pagamento = ({navigation}) => {
+const Pagamento = ({navigation, route}) => {
+  const { eventos, requestId, userId} = route.params;
+
   const [cpf, setCpf] = useState('');
+  const [nome, setNome] = useState('');
+  const [sobrenome, setSobrenome] = useState('');
+  const [email, setEmail] = useState('');
   const [data, setData] = useState('');
   const [numero, setNumero] = useState('');
   const [cep, setCep] = useState('');
@@ -26,6 +33,36 @@ const Pagamento = ({navigation}) => {
   ];
 
   const [inputsHabilitados, setInputsHabilitados] = useState(false);
+
+  useEffect(() => {
+    // Função para buscar as informações do usuário
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/users/${userId}`);
+        const userData = response.data;
+        console.log(userData);
+        setNome(userData.name);
+        console.log(userData.name);
+        setSobrenome(userData.name);
+        setEmail(userData.email);
+        setCpf(userData.cpf);
+        setData(userData.birthday);
+        setNumero(userData.tel);
+        setCep(userData.cep);
+        setEndereco(userData.address);
+        setBairro(userData.bairro);
+        setCidade(userData.city);
+        setUf(userData.uf);
+        setPais(userData.pais);
+      } catch (error) {
+        console.error("Erro ao buscar informações do usuário:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [userId]);
+
+  console.log(nome);
 
   const buscarEnderecoPorCep = async () => {
     try {
@@ -58,6 +95,12 @@ const Pagamento = ({navigation}) => {
     setModoEdicao(true);
   };
 
+  const valorTotalGeral = eventos.reduce((total, evento) => {
+    const valorTotalInteira = evento.quantidadeInteira * evento.eventData.priceInteira;
+    const valorTotalMeia = evento.quantidadeMeia * evento.eventData.priceMeia;
+    return total + valorTotalInteira + valorTotalMeia;
+  }, 0);
+
   return (
     <>
     <View style={Styles.container}>
@@ -68,17 +111,33 @@ const Pagamento = ({navigation}) => {
 
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{width: '90%', display: 'flex', alignItems: 'center', justifyContent: 'center', alignContent: 'center', flexDirection: 'column', paddingBottom: 80}}> 
           <View style={Styles.fundobranco}>
-            <Text style={{paddingLeft: 15, paddingTop: 10, fontSize: 18, fontWeight: 600}}>Informações do pedido</Text>
-            <Ingresso evento="Valorant Masters" local="São Paulo - Ibirapuera" data="09 Maio - 10 Maio" qtd="1 Ingresso" tipo="Inteira" valor="150,00"></Ingresso>
-            <Ingresso evento="IEM Rio 2024" local="Rio de Janeiro - Arena Jeunesse" data="15 Jun - 18 Jun" qtd="1 Ingresso" valor="150,00" tipo="Meia"></Ingresso>
-            
+            <Text style={{paddingLeft: 15, paddingTop: 10, fontSize: 18, fontWeight: 600}}>Informações do pedido: <Text style={{color: '#ff005c'}}>{requestId}</Text></Text>
+            {eventos.map((evento, index) => {
+                const { eventData, quantidadeInteira, quantidadeMeia } = evento;
+                const valorTotalInteira = quantidadeInteira * eventData.priceInteira;
+                const valorTotalMeia = quantidadeMeia * eventData.priceMeia;
+                return (
+                  <Ingresso
+                    key={index}
+                    evento={eventData.name}
+                    local={eventData.location}
+                    cidade={eventData.city}
+                    data={eventData.date}
+                    qtdInteira={quantidadeInteira}
+                    valorInt={valorTotalInteira.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    qtdMeia={quantidadeMeia}
+                    valorMeia={valorTotalMeia.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    imagemUri={eventData.image}
+                  />
+                );
+              })}
             <View style={{display: 'flex', flexDirection: 'row', backgroundColor: 'white', borderRadius: 15, paddingHorizontal: 15, paddingVertical: 10, borderTopWidth: 1,}}>
               
               <View style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
                 
                 <View style={{display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'baseline'}}>
                   <Text style={{fontWeight: '700', fontSize: 16}}>Total:</Text>
-                  <Text style={{color: '#FF005C', fontSize: 16, fontWeight: '700'}}>300,00</Text>
+                  <Text style={{color: '#FF005C', fontSize: 16, fontWeight: '700'}}>{valorTotalGeral.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</Text>
                 </View>
 
               </View>
@@ -95,7 +154,7 @@ const Pagamento = ({navigation}) => {
               <View style={Styles.campo2}>
                 <View >
                   <Text style={Styles.label}>Nome:*</Text>
-                  <TextInput style={Styles.inputmetade} placeholder='Marcelo'></TextInput>
+                  <TextInput style={Styles.inputmetade} value={nome} onChangeText={text => setNome(text)}></TextInput>
                 </View>
 
                 <View>
@@ -106,7 +165,7 @@ const Pagamento = ({navigation}) => {
 
               <View style={Styles.campo}>
                 <Text style={Styles.label}>Email:*</Text>
-                <TextInput style={Styles.input} textContentType='emailAddress' placeholder='triplogamer@gmail.com'></TextInput>
+                <TextInput style={Styles.input} textContentType='emailAddress' value={email} onChangeText={text => setEmail(text)} placeholder='triplogamer@gmail.com'></TextInput>
               </View>
 
               <View style={Styles.campo}>
@@ -335,7 +394,8 @@ const Styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: '#FF005C'
+    borderColor: '#FF005C',
+    color: 'black'
   },
   inputmetade:{
     width: 150,
@@ -343,7 +403,8 @@ const Styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: '#FF005C'
+    borderColor: '#FF005C',
+    color: 'black',
   },
   campo:{
     display: 'flex'
@@ -393,3 +454,17 @@ const Styles = StyleSheet.create({
 })
 
 export default Pagamento;
+
+function setNome(nome: any) {
+  throw new Error('Function not implemented.');
+}
+
+
+function setSobrenome(sobrenome: any) {
+  throw new Error('Function not implemented.');
+}
+
+
+function setEmail(email: any) {
+  throw new Error('Function not implemented.');
+}

@@ -26,6 +26,7 @@ const Carrinho = ({navigation, route}) => {
     return total + valorTotalInteira + valorTotalMeia;
   }, 0);
 
+  
   const handlePagamento = async () => {
     try {
       const userId = 1; // Substitua com o CPF real do usuário logado
@@ -45,9 +46,12 @@ const Carrinho = ({navigation, route}) => {
       });
   
       console.log("Resposta da API:", response.data);
+
+      // Assumindo que response.data é um array de objetos de requests e que cada objeto possui um ID
+      const requestId = response.data[0]?.id; // Obtenha o ID da primeira requisição, ajuste conforme necessário
   
-      // Navegar para a tela de pagamento após a criação do request
-      navigation.navigate("Pagamento", { eventos });
+      // Navegar para a tela de pagamento após a criação do request, passando o ID
+      navigation.navigate("Pagamento", { eventos, requestId, userId });
     } catch (error) {
       if (error.response) {
         console.error("Erro ao criar o request:", error.response.data);
@@ -56,6 +60,7 @@ const Carrinho = ({navigation, route}) => {
       }
     }
   };
+  
   
   
   const temIngresso = eventos.length > 0;
