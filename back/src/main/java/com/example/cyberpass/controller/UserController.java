@@ -1,8 +1,10 @@
-package com.example.cyberpass.Controller;
+package com.example.cyberpass.controller;
 
 import com.example.cyberpass.Modal.User;
 import com.example.cyberpass.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,26 +16,46 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/users")
-    public List<User> getAllUsers()
-    {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        try {
+            List<User> users = userService.getAllUsers();
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/users/{id}")
-    public User getUser(@PathVariable Long id)
-    {
-        return userService.getUser(id);
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        try {
+            User user = userService.getUser(id);
+            if (user != null) {
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PostMapping("/user/")
-    public User createUser(@RequestBody User user )
-    {
-        return userService.createUser(user);
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        try {
+            User createdUser = userService.createUser(user);
+            return ResponseEntity.ok(createdUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @DeleteMapping("/users/{id}")
-    public String removeUser(@PathVariable Long id)
-    {
-        return userService.removeUser(id);
+    public ResponseEntity<String> removeUser(@PathVariable Long id) {
+        try {
+            String result = userService.removeUser(id);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

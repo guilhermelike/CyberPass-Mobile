@@ -4,18 +4,13 @@ import jakarta.persistence.*;
 
 @Entity
 public class Request {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "cpf", referencedColumnName = "cpf")
+    @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "ticketId", referencedColumnName = "id")
-    private Ticket ticket;
 
     @ManyToOne
     @JoinColumn(name = "eventId", referencedColumnName = "id")
@@ -37,14 +32,6 @@ public class Request {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Ticket getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(Ticket ticket) {
-        this.ticket = ticket;
     }
 
     public Event getEvent() {
