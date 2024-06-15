@@ -7,8 +7,9 @@ import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useCarrinho } from '../../routes/CarrinhoContext';
 import axios from 'axios';
+import { API_URL } from '../../../api';
 
-const API_URL = "http://192.168.26.208:8080/requests/";
+const API = API_URL + "/requests/";
 
 const Carrinho = ({navigation, route}) => {
   
@@ -39,7 +40,7 @@ const Carrinho = ({navigation, route}) => {
   
       console.log("Enviando dados:", requests);
   
-      const response = await axios.post(API_URL, requests, {
+      const response = await axios.post(API, requests, {
         headers: {
           'Content-Type': 'application/json',
         },

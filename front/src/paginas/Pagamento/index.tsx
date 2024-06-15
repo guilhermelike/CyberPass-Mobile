@@ -2,12 +2,11 @@ import { View, Text, StyleSheet, ImageBackground, ScrollView, TextInput, Touchab
 import React, { useEffect, useState } from 'react'
 import Ingresso from '../../componentes/Ingresso/Index';
 import { TextInputMask } from 'react-native-masked-text';
-import DropdownComponent from '../../componentes/Dropdown/Index';
 import { Dropdown } from 'react-native-element-dropdown';
 import axios from 'axios';
+import { API_URL } from '../../../api';
 
 const isLoggedIn = false;
-const API_URL = "http://192.168.26.208:8080";
 
 const Pagamento = ({navigation, route}) => {
   const { eventos, requestId, userId} = route.params;
@@ -42,7 +41,6 @@ const Pagamento = ({navigation, route}) => {
         const userData = response.data;
         console.log(userData);
         setNome(userData.name);
-        console.log(userData.name);
         setSobrenome(userData.name);
         setEmail(userData.email);
         setCpf(userData.cpf);
@@ -62,7 +60,6 @@ const Pagamento = ({navigation, route}) => {
     fetchUserData();
   }, [userId]);
 
-  console.log(nome);
 
   const buscarEnderecoPorCep = async () => {
     try {
@@ -154,7 +151,7 @@ const Pagamento = ({navigation, route}) => {
               <View style={Styles.campo2}>
                 <View >
                   <Text style={Styles.label}>Nome:*</Text>
-                  <TextInput style={Styles.inputmetade} value={nome} onChangeText={text => setNome(text)}></TextInput>
+                  <TextInput style={Styles.inputmetade}></TextInput>
                 </View>
 
                 <View>
@@ -165,7 +162,7 @@ const Pagamento = ({navigation, route}) => {
 
               <View style={Styles.campo}>
                 <Text style={Styles.label}>Email:*</Text>
-                <TextInput style={Styles.input} textContentType='emailAddress' value={email} onChangeText={text => setEmail(text)} placeholder='triplogamer@gmail.com'></TextInput>
+                <TextInput style={Styles.input} textContentType='emailAddress' placeholder='triplogamer@gmail.com'></TextInput>
               </View>
 
               <View style={Styles.campo}>

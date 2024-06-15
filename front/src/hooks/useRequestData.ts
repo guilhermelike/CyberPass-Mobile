@@ -2,8 +2,7 @@ import axios from "axios";
 import { useState } from 'react';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { RequestData } from "../interface/RequestData";
-
-const API_URL = "http://192.168.26.208:8080";
+import { API_URL } from "../../api";
 
 export function useCreateRequest() {
     const queryClient = useQueryClient();

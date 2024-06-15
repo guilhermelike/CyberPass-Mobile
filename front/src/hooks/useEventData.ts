@@ -1,8 +1,7 @@
 import axios, { AxiosPromise, AxiosResponse } from "axios"
 import { EventData } from "../interface/EventData";
 import { useQuery } from "@tanstack/react-query";
-
-const API_URL = "http://192.168.26.208:8080";
+import { API_URL } from "../../api";
 
 const fetchData = async (): Promise<AxiosResponse<EventData[]>> => {
     const response = await axios.get<EventData[]>(API_URL + '/events');

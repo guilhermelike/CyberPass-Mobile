@@ -7,6 +7,7 @@ import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { API_URL } from '../../../api';
 
 
 const Evento = ({navigation}) => {
@@ -17,7 +18,7 @@ const Evento = ({navigation}) => {
 
   useEffect(() => {
     if (eventId) {
-      axios.get(`http://192.168.26.208:8080/events/${eventId}`)
+      axios.get(API_URL + `/events/${eventId}`)
       .then(response => {
         setEventData(response.data);
       })
