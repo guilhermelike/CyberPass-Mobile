@@ -1,22 +1,26 @@
-import { View, Text, StatusBar, StyleSheet, TextInput, Image, ImageBackground, Alert} from 'react-native'
+import { View, Text, StatusBar, StyleSheet, TextInput, Image, ImageBackground} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Button } from 'react-native-paper'
-import { Link, useNavigation, useRoute } from '@react-navigation/native';
-import Cadastro from '../Cadastro';
 import axios from 'axios';
-import { UserData } from '../../interface/UserData';
+import { API_URL } from '../../../api';
 
 const Login = ({navigation}) => {
   
     const [userData, setUserData] = useState([]);
 
-    const [username, setUsername] = useState<string>('');
+    const [login, setLogin] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const [isLogged, setIsLogged] = useState<boolean>(false);
+
+    useEffect(() => {
+      if (isLogged)
+        navigation.navigate("Home");
+    }, []);
 
     useEffect(() => {
       const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/users');
+            const response = await axios.get(API_URL + '/users');
             setUserData(response.data);
         } catch (error: any) {
             console.error('Error:', error);
@@ -36,14 +40,17 @@ const Login = ({navigation}) => {
 
   const handleSubmit = () => {
     const filteredUser = userData.filter(user => 
-      user.email.toLowerCase() === (username.toLowerCase())
+      user.email.toLowerCase() === (login.toLowerCase())
   );
     const filteredPassword = userData.filter(user =>
       user.password.toLowerCase() === (password.toLowerCase())
   );
 
-  if (filteredUser.length > 0 && filteredPassword.length > 0)
+  if (filteredUser.length > 0 && filteredPassword.length > 0){
     console.log("LOGIN CORRETO");
+    setIsLogged(true);
+    navigation.navigate("Carrinho", { isLogged: isLogged});
+  }
   else
     console.log("LOGIN INCORRETO");
 };
@@ -70,8 +77,8 @@ const Login = ({navigation}) => {
               textContentType='emailAddress' 
               style={styles.input} 
               placeholder='Digite seu e-mail'
-              value={username}
-              onChangeText={setUsername}
+              value={login}
+              onChangeText={setLogin}
             >
             </TextInput>
           </View>
@@ -103,7 +110,7 @@ const Login = ({navigation}) => {
 
             <View style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 10}}>
               <Text style={styles.branco4}>Ainda não possui cadastro?</Text>
-              <Text style={styles.rosa3} onPress={() => navigation.navigate("Cadastro", { login: username, password: password})}>Cadastre-se</Text>
+              <Text style={styles.rosa3} onPress={() => navigation.navigate("Cadastro")}>Cadastre-se</Text>
             </View>
           </View>
         </View>

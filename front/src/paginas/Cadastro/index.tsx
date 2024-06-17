@@ -2,15 +2,10 @@ import { View, Text, StatusBar, StyleSheet, TextInput, Image, ScrollView, ImageB
 import React, { useState } from 'react'
 import { Button } from 'react-native-paper'
 import { TextInputMask } from 'react-native-masked-text'
-import { useRoute } from '@react-navigation/native'
 
 const Cadastro = ({navigation}) => {
   const [cpf, setCpf] = useState('');
   const [data, setData] = useState('');
-
-  const route = useRoute();
-  const { login } = route.params;
-  const { password } = route.params;
 
   return (
     <>

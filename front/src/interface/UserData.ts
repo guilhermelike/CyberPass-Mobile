@@ -10,9 +10,11 @@ export interface UserData{
     email: string;
     gender: string;
     name: string;
+    lastname: string;
     neighbourhood: string;
     password: string;
     refpoint: string;
     tel: string;
     uf: string;
+    isLogged: boolean;
 }

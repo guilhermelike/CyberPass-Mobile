@@ -17,6 +17,9 @@ public class User {
     @Column(nullable = false, length = 255)
     private String name;
 
+    @Column(nullable = false, length = 255)
+    private String lastname;
+
     @Column(nullable = false, length = 32)
     private String password;
 
@@ -57,6 +60,9 @@ public class User {
     @Column(nullable = false, length = 255)
     private String city;
 
+    @Column(nullable = false)
+    private Boolean isLogged;
+
     // Getters and Setters
 
     public Long getId() {
@@ -81,6 +87,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getPassword() {
@@ -185,5 +199,13 @@ public class User {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public Boolean getIsLogged() {
+        return isLogged;
+    }
+
+    public void setIsLogged(Boolean isLogged) {
+        this.isLogged = isLogged;
     }
 }

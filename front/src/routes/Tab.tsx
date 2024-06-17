@@ -2,31 +2,53 @@ import * as React from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import Home from '../paginas/Home';
 import Login from '../paginas/Login';
-import { BottomTabNavigationProp, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Carrinho from '../paginas/Carrinho';
 import { Ionicons } from "@expo/vector-icons";
-import { View, Text, Button } from 'react-native' 
-import { NativeStackNavigationProp, createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View, Text } from 'react-native' 
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Cadastro from '../paginas/Cadastro';
 import Evento from '../paginas/Evento';
-import Card from '../componentes/Card/Index';
-import { AuthContext } from './Auth';
-import Perfil from '../paginas/Perfil';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Pedidos from '../paginas/Pedidos';
 import Dados from '../paginas/Dados';
-import Header from '../componentes/Header';
-import Component from 'react-native-paper/lib/typescript/components/List/ListItem';
 import Pagamento from '../paginas/Pagamento';
-import Setor from '../componentes/Setor/Index';
-import { CarrinhoContext, CarrinhoProvider, useCarrinho } from './CarrinhoContext';
+import { CarrinhoProvider, useCarrinho } from './CarrinhoContext';
+import axios from 'axios';
+import { API_URL } from '../../api';
+import {  useState } from 'react'
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const TopTab = createMaterialTopTabNavigator();
+let isLogged = false;
 
 const HeaderTitle = ({ children }) => {
     const navigation = useNavigation();
+
+    const [userData, setUserData] = useState([]);
+
+    React.useEffect(() => {
+        const fetchData = async () => {
+          try {
+              const response = await axios.get(API_URL + '/users');
+              setUserData(response.data);
+    
+                const filteredField = userData.filter(user => 
+                user.isLogged === 1);
+            
+            if (filteredField.length > 0){
+                console.log("TA LOGADO");
+                isLogged = true;
+            }
+    
+        } catch (error: any) {
+            console.error('Error:', error);
+        }
+    };
+    
+      fetchData();
+    }, []);
   
     return (
       <View style={{ flexDirection: 'row', marginTop: -12 }}>
@@ -36,23 +58,22 @@ const HeaderTitle = ({ children }) => {
     );
   };
 
+
 function Usuario(){
-    const { user } = React.useContext(AuthContext);
     return(
         <Stack.Navigator screenOptions={{headerShown: false}}>
             {/* É NECESSÁRIO ALTERAR A ORDEM, ESTÁ AO CONTRÁRIO PARA SER POSSÍVEL FAZER AS TELAS DE USUÁRIO LOGADO*/}
-            {user ? (
-                <>
+            {!isLogged ? (
+            <>
+                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="Cadastro" component={Cadastro} />
+            </>                
+            ) : (
+            <>
                 <Stack.Screen name="CyberPass" component={MeuPerfil} options={{headerShown: true, headerTitleAlign: 'center', headerStyle:{backgroundColor: 'black'}, headerTintColor: 'white', 
                 headerTitle: (props) => <HeaderTitle {...props}>Pass</HeaderTitle>,
-            }}/>
+                }}/>
             </>
-                
-            ) : (
-                <>
-                    <Stack.Screen name="Login" component={Login} />
-                    <Stack.Screen name="Cadastro" component={Cadastro} />
-                </>
             )}
         </Stack.Navigator>
     )

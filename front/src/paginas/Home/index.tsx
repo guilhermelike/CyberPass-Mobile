@@ -1,9 +1,8 @@
-import { View, Text, Button, StyleSheet, Image, ImageBackground, TextInput, ScrollView, TouchableOpacity} from 'react-native'
-import React, { useEffect } from 'react'
+import { View, Text, StyleSheet, ImageBackground, TextInput, ScrollView, TouchableOpacity} from 'react-native'
+import React from 'react'
 import { StatusBar } from 'expo-status-bar';
 import { IconButton } from 'react-native-paper';
 import Card from '../../componentes/Card/Index';
-import { EventData } from '../../interface/EventData';
 import { useEventData } from '../../hooks/useEventData';
 
 const Home = ({navigation}) => {
