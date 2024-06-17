@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, ImageBackground, ScrollView, TextInput, Touchab
 import React, { useEffect, useState } from 'react'
 import Ingresso from '../../componentes/Ingresso/Index';
 import { TextInputMask } from 'react-native-masked-text';
+import DropdownComponent from '../../componentes/Dropdown/Index';
 import { Dropdown } from 'react-native-element-dropdown';
 import axios from 'axios';
 import { API_URL } from '../../../api';
@@ -17,11 +18,13 @@ const Pagamento = ({navigation, route}) => {
   const [email, setEmail] = useState('');
   const [data, setData] = useState('');
   const [numero, setNumero] = useState('');
-  const [cep, setCep] = useState('');
+  const [CEP, setCEP] = useState('');
   const [endereco, setEndereco] = useState('');
   const [bairro, setBairro] = useState('');
   const [cidade, setCidade] = useState('');
   const [uf, setUf] = useState('');
+  const [complemento, setComplemento] = useState('');
+  const [referencia, setReferencia] = useState('');
   const [pais, setPais] = useState('');
   const [modoEdicao, setModoEdicao] = useState(false);
   const [selectedOption, setSelectedOption] = useState('');
@@ -37,21 +40,27 @@ const Pagamento = ({navigation, route}) => {
     // Função para buscar as informações do usuário
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`${API_URL}/users/${userId}`);
+        const response = await axios.get(API_URL + `/users/${userId}`);
         const userData = response.data;
         console.log(userData);
         setNome(userData.name);
-        setSobrenome(userData.name);
         setEmail(userData.email);
         setCpf(userData.cpf);
         setData(userData.birthday);
         setNumero(userData.tel);
-        setCep(userData.cep);
-        setEndereco(userData.address);
-        setBairro(userData.bairro);
         setCidade(userData.city);
+        setBairro(userData.neighbourhood);
+        setComplemento(userData.complement);
+        setReferencia(userData.refpoint);
         setUf(userData.uf);
-        setPais(userData.pais);
+        setPais(userData.country);
+        if (userData.cep) {
+          setCEP(userData.cep);
+        } else {
+          console.warn('CEP não encontrado na resposta da API');
+          setCEP('');
+        }        console.log(userData.cep);
+        setEndereco(userData.address);
       } catch (error) {
         console.error("Erro ao buscar informações do usuário:", error);
       }
@@ -60,24 +69,28 @@ const Pagamento = ({navigation, route}) => {
     fetchUserData();
   }, [userId]);
 
+  useEffect(() => {
+    console.log("CEP atualizado:", cep);
+  }, [cep]);
+  
 
-  const buscarEnderecoPorCep = async () => {
-    try {
-      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-      const data = await response.json();
-      if (!data.erro) {
-        setEndereco(data.logradouro);
-        setBairro(data.bairro);
-        setCidade(data.localidade);
-        setUf(data.uf);
-        setPais('Brasil');
-      } else {
-        console.error('CEP não encontrado');
-      }
-    } catch (error) {
-      console.error('Erro ao buscar endereço:', error);
-    }
-  };
+  // const buscarEnderecoPorCep = async () => {
+  //   try {
+  //     const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+  //     const data = await response.json();
+  //     if (!data.erro) {
+  //       setEndereco(data.logradouro);
+  //       setBairro(data.bairro);
+  //       setCidade(data.localidade);
+  //       setUf(data.uf);
+  //       setPais('Brasil');
+  //     } else {
+  //       console.error('CEP não encontrado');
+  //     }
+  //   } catch (error) {
+  //     console.error('Erro ao buscar endereço:', error);
+  //   }
+  // };
 
   const Voltar = () => {
       setModoEdicao(false);
@@ -151,7 +164,7 @@ const Pagamento = ({navigation, route}) => {
               <View style={Styles.campo2}>
                 <View >
                   <Text style={Styles.label}>Nome:*</Text>
-                  <TextInput style={Styles.inputmetade}></TextInput>
+                  <TextInput style={Styles.inputmetade} value={nome} onChangeText={text => setNome(text)}></TextInput>
                 </View>
 
                 <View>
@@ -162,7 +175,7 @@ const Pagamento = ({navigation, route}) => {
 
               <View style={Styles.campo}>
                 <Text style={Styles.label}>Email:*</Text>
-                <TextInput style={Styles.input} textContentType='emailAddress' placeholder='triplogamer@gmail.com'></TextInput>
+                <TextInput style={Styles.input} textContentType='emailAddress' value={email} onChangeText={text => setEmail(text)} placeholder='triplogamer@gmail.com'></TextInput>
               </View>
 
               <View style={Styles.campo}>
@@ -200,7 +213,7 @@ const Pagamento = ({navigation, route}) => {
                 style={Styles.input}/>
               </View>
 
-              <View style={Styles.campo}>
+              {/* <View style={Styles.campo}>
                 <Text style={Styles.label}>CEP:*</Text>
                 <TextInputMask 
               
@@ -209,43 +222,47 @@ const Pagamento = ({navigation, route}) => {
                 value={cep}
                 onChangeText={text => setCep(text)}
                 placeholder='12345-678'
-                onBlur={buscarEnderecoPorCep}
                 style={Styles.input}/>
+              </View> */}
+
+              <View style={Styles.campo}>
+                <Text style={Styles.label}>CEP:*</Text>
+                <TextInput value={CEP} onChangeText={text => setCEP(text)} style={Styles.input} placeholder='CEP...'></TextInput>
               </View>
 
               <View style={Styles.campo}>
                 <Text style={Styles.label}>Endereço:*</Text>
-                <TextInput value={endereco} style={Styles.input} placeholder='Endereço...'></TextInput>
+                <TextInput value={endereco} onChangeText={text => setEndereco(text)} style={Styles.input} placeholder='Endereço...'></TextInput>
               </View>
 
               <View style={Styles.campo}>
                 <Text style={Styles.label}>Complemento:</Text>
-                <TextInput style={Styles.input} placeholder='Complemento...'></TextInput>
+                <TextInput style={Styles.input} value={complemento} onChangeText={text => setComplemento(text)} placeholder='Complemento...'></TextInput>
               </View>
 
               <View style={Styles.campo}>
                 <Text style={Styles.label}>Bairro:*</Text>
-                <TextInput style={Styles.input} value={bairro} placeholder='Bairro...'></TextInput>
+                <TextInput style={Styles.input} value={bairro} onChangeText={text => setBairro(text)} placeholder='Bairro...'></TextInput>
               </View>
 
               <View style={Styles.campo}>
                 <Text style={Styles.label}>Cidade:*</Text>
-                <TextInput style={Styles.input} value={cidade} placeholder='Cidade...'></TextInput>
+                <TextInput style={Styles.input} value={cidade} onChangeText={text => setCidade(text)} placeholder='Cidade...'></TextInput>
               </View>
 
               <View style={Styles.campo}>
                 <Text style={Styles.label}>Ponto de Referência:</Text>
-                <TextInput style={Styles.input} placeholder='Referência...'></TextInput>
+                <TextInput style={Styles.input} value={referencia} onChangeText={text => setReferencia(text)} placeholder='Referência...'></TextInput>
               </View>
 
               <View style={Styles.campo}>
                 <Text style={Styles.label}>UF:*</Text>
-                <TextInput style={Styles.input} value={uf} placeholder='UF...'></TextInput>
+                <TextInput style={Styles.input} value={uf} onChangeText={text => setUf(text)} placeholder='UF...'></TextInput>
               </View>
 
               <View style={Styles.campo}>
                 <Text style={Styles.label}>País:*</Text>
-                <TextInput style={Styles.input} value={pais} placeholder='País...'></TextInput>
+                <TextInput style={Styles.input} value={pais} onChangeText={text => setPais(text)} placeholder='País...'></TextInput>
               </View>
               </>
           ) : (

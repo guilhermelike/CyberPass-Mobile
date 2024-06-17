@@ -5,6 +5,7 @@ import { Link, useNavigation, useRoute } from '@react-navigation/native';
 import Cadastro from '../Cadastro';
 import axios from 'axios';
 import { UserData } from '../../interface/UserData';
+import { API_URL } from '../../../api';
 
 const Login = ({navigation}) => {
   
@@ -16,7 +17,7 @@ const Login = ({navigation}) => {
     useEffect(() => {
       const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/users');
+            const response = await axios.get(API_URL + '/users');
             setUserData(response.data);
         } catch (error: any) {
             console.error('Error:', error);
