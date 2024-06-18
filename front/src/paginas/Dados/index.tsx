@@ -1,13 +1,20 @@
-import { View, Text, StatusBar, StyleSheet, TextInput, Image, ScrollView, ImageBackground, TouchableOpacity} from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, StatusBar, StyleSheet, TextInput, Image, ScrollView, ImageBackground, TouchableOpacity, Alert} from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { Button } from 'react-native-paper'
 import { TextInputMask } from 'react-native-masked-text'
+import axios from 'axios'
+import { API_URL } from '../../../api'
+import { format } from 'date-fns/format'
 
 const Dados = ({navigation}) => {
+  const [nome, setNome] = useState('');
+  const [sobrenome, setSobrenome] = useState('');
+  const [email, setEmail] = useState('');
+  const [complemento, setComplemento] = useState('');
+  const [ref, setRef] = useState('');
   const [cpf, setCpf] = useState('');
   const [data, setData] = useState('');
   const [numero, setNumero] = useState('');
-  const [cep, setCep] = useState('');
   const [endereco, setEndereco] = useState('');
   const [bairro, setBairro] = useState('');
   const [cidade, setCidade] = useState('');
@@ -20,23 +27,65 @@ const Dados = ({navigation}) => {
 
   const [inputsHabilitados, setInputsHabilitados] = useState(false);
 
-  const buscarEnderecoPorCep = async () => {
-    try {
-      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-      const data = await response.json();
-      if (!data.erro) {
-        setEndereco(data.logradouro);
-        setBairro(data.bairro);
-        setCidade(data.localidade);
-        setUf(data.uf);
-        setPais('Brasil');
-      } else {
-        console.error('CEP não encontrado');
+  const userId = 1;
+
+  useEffect(() => {
+    // Função para buscar as informações do usuário
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(API_URL + `/users/${userId}`);
+        const userData = response.data;
+        console.log(userData);
+        setNome(userData.name);
+        setSobrenome(userData.lastname);
+        setEmail(userData.email);
+        setCpf(userData.cpf);
+        setData(formatarData(userData.birthday));
+        setNumero(userData.tel);
+        setCidade(userData.city);
+        setBairro(userData.neighbourhood);
+        setComplemento(userData.complement);
+        setRef(userData.refpoint);
+        setUf(userData.uf);
+        setPais(userData.country);
+        setEndereco(userData.address);
+      } catch (error) {
+        console.error("Erro ao buscar informações do usuário:", error);
       }
-    } catch (error) {
-      console.error('Erro ao buscar endereço:', error);
-    }
+    };
+
+    fetchUserData();
+  }, [userId]);
+
+  const formatarData = (data) => {
+    if (!data) return '';
+    return format(new Date(data), 'dd/MM/yyyy');
   };
+
+  const dataAmericana = (data) => {
+    if (!data) return '';
+  
+    // Dividir a string da data em dia, mês e ano
+    const partes = data.split('/');
+    if (partes.length !== 3) return '';
+  
+    const dia = partes[0];
+    const mes = partes[1] - 1; // Mês no JavaScript é zero-indexed (0-11)
+    const ano = partes[2];
+  
+    // Construir um objeto Date usando ano, mês e dia
+    const dataFormatada = new Date(ano, mes, dia);
+  
+    // Verificar se o objeto Date construído é válido
+    if (isNaN(dataFormatada.getTime())) {
+      return '';
+    }
+  
+    // Formatar para 'yyyy-MM-dd' utilizando a função format do date-fns
+    const dataFinal = format(dataFormatada, 'yyyy-MM-dd');
+    return dataFinal;
+  };
+  
 
   const alterarInputs = () => {
     if (inputsHabilitados == false){
@@ -55,11 +104,44 @@ const Dados = ({navigation}) => {
     setInputsHabilitados(true);
   };
 
-  const salvarDados = () => {
-    setInputsHabilitados(false);
-    setModoEdicao(false);
-    setChangePasswordMode(false);
+  const salvarDados = async () => {
+    try {
+      const dataFormatada = dataAmericana(data);
+
+  console.log(dataFormatada);
+
+      const response = await axios.put(API_URL + `/users/${userId}`, {
+        name: nome,
+        lastname: sobrenome,
+        email: email,
+        cpf: cpf,
+        birthday: dataFormatada,
+        tel: numero,
+        city: cidade,
+        neighbourhood: bairro,
+        complement: complemento,
+        refpoint: ref,
+        uf: uf,
+        country: pais,
+        address: endereco
+      });
+
+
+      if (response.status === 200) {
+        Alert.alert('Sucesso', 'Dados atualizados com sucesso.');
+        setInputsHabilitados(false);
+        setModoEdicao(false);
+        setChangePasswordMode(false);
+      } else {
+        Alert.alert('Erro', 'Não foi possível atualizar os dados.');
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar os dados:', error);
+      Alert.alert('Erro', 'Não foi possível atualizar os dados.');
+    }
   };
+
+  
 
   return (
     <>
@@ -73,18 +155,18 @@ const Dados = ({navigation}) => {
               <View style={styles.campo2}>
                 <View >
                   <Text style={styles.label}>Nome:</Text>
-                  <TextInput editable={inputsHabilitados} style={[styles.inputmetade, !inputsHabilitados && styles.inputDesabilitado]} placeholder='Marcelo'></TextInput>
+                  <TextInput editable={inputsHabilitados} value={nome} onChangeText={text => setNome(text)} style={[styles.inputmetade, !inputsHabilitados && styles.inputDesabilitado]} placeholder='Marcelo'></TextInput>
                 </View>
 
                 <View>
                   <Text style={styles.label}>Sobrenome:</Text>
-                  <TextInput editable={inputsHabilitados} style={[styles.inputmetade, !inputsHabilitados && styles.inputDesabilitado]} placeholder='Batista'></TextInput>
+                  <TextInput editable={inputsHabilitados} value={sobrenome} onChangeText={text => setSobrenome(text)} style={[styles.inputmetade, !inputsHabilitados && styles.inputDesabilitado]} placeholder='Batista'></TextInput>
                 </View>
               </View>
 
               <View style={styles.campo}>
                 <Text style={styles.label}>Email:</Text>
-                <TextInput editable={inputsHabilitados} textContentType='emailAddress' style={[styles.input, !inputsHabilitados && styles.inputDesabilitado]} placeholder='triplogamer@gmail.com'></TextInput>
+                <TextInput editable={inputsHabilitados} value={email} onChangeText={text => setEmail(text)} textContentType='emailAddress' style={[styles.input, !inputsHabilitados && styles.inputDesabilitado]} placeholder='triplogamer@gmail.com'></TextInput>
               </View>
 
               <View style={styles.campo}>
@@ -123,26 +205,13 @@ const Dados = ({navigation}) => {
               </View>
 
               <View style={styles.campo}>
-                <Text style={styles.label}>CEP:</Text>
-                <TextInputMask 
-                style={[styles.input, !inputsHabilitados && styles.inputDesabilitado]}
-                type={'zip-code'}
-                maxLength={9}
-                value={cep}
-                onChangeText={text => setCep(text)}
-                placeholder='12345-678'
-                onBlur={buscarEnderecoPorCep}
-                editable={inputsHabilitados}/>
-              </View>
-
-              <View style={styles.campo}>
                 <Text style={styles.label}>Endereço:</Text>
                 <TextInput value={endereco} editable={inputsHabilitados} style={[styles.input, !inputsHabilitados && styles.inputDesabilitado]} placeholder='Endereço...'></TextInput>
               </View>
 
               <View style={styles.campo}>
                 <Text style={styles.label}>Complemento:</Text>
-                <TextInput editable={inputsHabilitados} style={[styles.input, !inputsHabilitados && styles.inputDesabilitado]} placeholder='Complemento...'></TextInput>
+                <TextInput value={complemento} onChangeText={text => setComplemento(text)} editable={inputsHabilitados} style={[styles.input, !inputsHabilitados && styles.inputDesabilitado]} placeholder='Complemento...'></TextInput>
               </View>
 
               <View style={styles.campo}>
@@ -157,7 +226,7 @@ const Dados = ({navigation}) => {
 
               <View style={styles.campo}>
                 <Text style={styles.label}>Ponto de Referência:</Text>
-                <TextInput editable={inputsHabilitados} style={[styles.input, !inputsHabilitados && styles.inputDesabilitado]} placeholder='Referência...'></TextInput>
+                <TextInput value={ref} onChangeText={text => setRef(text)} editable={inputsHabilitados} style={[styles.input, !inputsHabilitados && styles.inputDesabilitado]} placeholder='Referência...'></TextInput>
               </View>
 
               <View style={styles.campo}>

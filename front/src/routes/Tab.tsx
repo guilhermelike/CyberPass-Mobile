@@ -63,7 +63,7 @@ function Usuario(){
     return(
         <Stack.Navigator screenOptions={{headerShown: false}}>
             {/* É NECESSÁRIO ALTERAR A ORDEM, ESTÁ AO CONTRÁRIO PARA SER POSSÍVEL FAZER AS TELAS DE USUÁRIO LOGADO*/}
-            {!isLogged ? (
+            {isLogged ? (
             <>
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Cadastro" component={Cadastro} />
@@ -94,6 +94,7 @@ function FluxoPedido(){
             <Stack.Screen name="Carrinho" component={Carrinho}/>
             <Stack.Screen name="Pagamento" component={Pagamento}/>
             <Stack.Screen name="Login" component={Login}/>
+            <Stack.Screen name="MeusPedidos" component={Usuario}/>
         </Stack.Navigator>
     )
 }
