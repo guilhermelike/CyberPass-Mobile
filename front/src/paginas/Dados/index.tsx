@@ -5,7 +5,7 @@ import axios from 'axios';
 import { API_URL } from '../../../api';
 import { format } from 'date-fns';
 
-const Dados = ({navigation}) => {
+const Dados = () => {
   const [nome, setNome] = useState('');
   const [sobrenome, setSobrenome] = useState('');
   const [email, setEmail] = useState('');
@@ -156,7 +156,7 @@ const Dados = ({navigation}) => {
       Alert.alert('Erro', 'Não foi possível atualizar os dados.');
     }
   };
-
+  }
   
 
   return (
@@ -282,12 +282,7 @@ const Dados = ({navigation}) => {
 
               {!modoEdicao && !changePasswordMode ? (
                 <>
-                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>              
-                  <View style={styles.botao}>
-                    <TouchableOpacity onPress={alterarInputs} style={styles.botao2}>
-                      <Text style={{ color: 'white', fontSize: 18 }}>Alterar</Text>
-                    </TouchableOpacity>
-                  </View>
+                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>              
                   <View style={styles.botao}>
                     <TouchableOpacity onPress={Logoff} style={styles.botao2}>
                       <Text style={{ color: 'white', fontSize: 18 }}>Logoff</Text>
@@ -310,9 +305,7 @@ const Dados = ({navigation}) => {
             </ImageBackground>
           </View>
     </>
-  )
-}
-
+  )}
 const styles = StyleSheet.create({
   metade:{
     width: '50%'

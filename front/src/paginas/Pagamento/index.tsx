@@ -269,23 +269,6 @@ const [pedidoFinalizado, setPedidoFinalizado] = useState(false);
                 style={Styles.input}/>
               </View>
 
-              {/* <View style={Styles.campo}>
-                <Text style={Styles.label}>CEP:*</Text>
-                <TextInputMask 
-              
-                type={'zip-code'}
-                maxLength={9}
-                value={cep}
-                onChangeText={text => setCep(text)}
-                placeholder='12345-678'
-                style={Styles.input}/>
-              </View> */}
-
-              <View style={Styles.campo}>
-                <Text style={Styles.label}>CEP:*</Text>
-                <TextInput value={CEP} onChangeText={text => setCEP(text)} style={Styles.input} placeholder='CEP...'></TextInput>
-              </View>
-
               <View style={Styles.campo}>
                 <Text style={Styles.label}>Endereço:*</Text>
                 <TextInput value={endereco} onChangeText={text => setEndereco(text)} style={Styles.input} placeholder='Endereço...'></TextInput>

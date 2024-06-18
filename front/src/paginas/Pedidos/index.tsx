@@ -32,7 +32,7 @@ const Pedidos = () => {
 
   return (
     <View style={styles.container}>
-      <ImageBackground source={require('../../../assets/background.png')} resizeMode='cover' style={{ alignItems: 'center', width: '100%', paddingBottom: 80 }}>
+      <ImageBackground source={require('../../../assets/background.png')} resizeMode='cover' style={{ alignItems: 'center', width: '100%',  height: '100%' }}>
         <ScrollView contentContainerStyle={{ alignItems: 'center' }} showsVerticalScrollIndicator={false}>
           {pedidos.map((pedido, index) => (
             <View key={index} style={{ backgroundColor: 'white', borderRadius: 15, width: '90%', marginTop: 25 }}>

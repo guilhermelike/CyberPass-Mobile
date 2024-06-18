@@ -110,15 +110,6 @@ const Login = ({navigation}) => {
             >
             </TextInput>
             
-            <View style={styles.recuperar}>
-              <View>
-                <Text style={styles.branco3}>Esqueceu a sua senha?</Text>
-              </View>
-              <View>
-                <Text style={styles.rosa2}>Recuperar!</Text>
-              </View>
-            </View>
-
             <View style={styles.botao}>
               <Button onPress={handleSubmit} style={styles.botao2} textColor='white' labelStyle={{fontSize: 18}}>Login</Button>
             </View>
