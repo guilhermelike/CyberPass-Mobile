@@ -39,28 +39,4 @@ public class UserService {
         userRepository.deleteById(id);
         return "Successfully removed the user with id : " + id;
     }
-
-    public User updateUser(Long id, User updatedUser) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            User existingUser = optionalUser.get();
-            existingUser.setName(updatedUser.getName());
-            existingUser.setLastname(updatedUser.getLastname());
-            existingUser.setEmail(updatedUser.getEmail());
-            existingUser.setCpf(updatedUser.getCpf());
-            existingUser.setBirthday(updatedUser.getBirthday());
-            existingUser.setTel(updatedUser.getTel());
-            existingUser.setCity(updatedUser.getCity());
-            existingUser.setNeighbourhood(updatedUser.getNeighbourhood());
-            existingUser.setComplement(updatedUser.getComplement());
-            existingUser.setRefpoint(updatedUser.getRefpoint());
-            existingUser.setUf(updatedUser.getUf());
-            existingUser.setCountry(updatedUser.getCountry());
-            existingUser.setAddress(updatedUser.getAddress());
-
-            return userRepository.save(existingUser);
-        } else {
-            return null; // ou lançar exceção, dependendo do caso
-        }
-    }
 }
