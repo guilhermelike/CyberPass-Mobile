@@ -16,39 +16,14 @@ import Pagamento from '../paginas/Pagamento';
 import { CarrinhoProvider, useCarrinho } from './CarrinhoContext';
 import axios from 'axios';
 import { API_URL } from '../../api';
-import {  useState } from 'react'
+import { useState } from 'react';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const TopTab = createMaterialTopTabNavigator();
-let isLogged = false;
 
 const HeaderTitle = ({ children }) => {
     const navigation = useNavigation();
-
-    const [userData, setUserData] = useState([]);
-
-    React.useEffect(() => {
-        const fetchData = async () => {
-          try {
-              const response = await axios.get(API_URL + '/users');
-              setUserData(response.data);
-    
-                const filteredField = userData.filter(user => 
-                user.isLogged === 1);
-            
-            if (filteredField.length > 0){
-                console.log("TA LOGADO");
-                isLogged = true;
-            }
-    
-        } catch (error: any) {
-            console.error('Error:', error);
-        }
-    };
-    
-      fetchData();
-    }, []);
   
     return (
       <View style={{ flexDirection: 'row', marginTop: -12 }}>
@@ -60,20 +35,39 @@ const HeaderTitle = ({ children }) => {
 
 
 function Usuario(){
+
+    let userData;
+    const [isLogged, setIsLogged] = useState<boolean>(false);
+
+    React.useEffect(() => {
+        const fetchData = async () => {
+          try {
+              const response = await axios.get(API_URL + '/users');
+              userData = response.data;
+              if ((userData.filter(user => user.isLogged === true).length) > 0)
+                setIsLogged(true);
+        } catch (error: any) {
+            console.error('Error:', error);
+        }
+    };
+    
+      fetchData();
+    }, []);
+
     return(
         <Stack.Navigator screenOptions={{headerShown: false}}>
             {/* É NECESSÁRIO ALTERAR A ORDEM, ESTÁ AO CONTRÁRIO PARA SER POSSÍVEL FAZER AS TELAS DE USUÁRIO LOGADO*/}
-            {!isLogged ? (
-            <>
-                <Stack.Screen name="Login" component={Login} />
-                <Stack.Screen name="Cadastro" component={Cadastro} />
-            </>                
-            ) : (
+            {isLogged ? (  
             <>
                 <Stack.Screen name="CyberPass" component={MeuPerfil} options={{headerShown: true, headerTitleAlign: 'center', headerStyle:{backgroundColor: 'black'}, headerTintColor: 'white', 
                 headerTitle: (props) => <HeaderTitle {...props}>Pass</HeaderTitle>,
                 }}/>
-            </>
+            </>     
+            ) : (
+            <>
+                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="Cadastro" component={Cadastro} />
+            </>   
             )}
         </Stack.Navigator>
     )

@@ -6,22 +6,19 @@ import { API_URL } from '../../../api';
 
 const Login = ({navigation}) => {
   
-    const [userData, setUserData] = useState([]);
+    const [allUserData, setAllUserData] = useState([]);
 
     const [login, setLogin] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [isLogged, setIsLogged] = useState<boolean>(false);
 
-    useEffect(() => {
-      if (isLogged)
-        navigation.navigate("Home");
-    }, []);
+    let userId: number;
+    let userData: any;
 
     useEffect(() => {
       const fetchData = async () => {
         try {
             const response = await axios.get(API_URL + '/users');
-            setUserData(response.data);
+            setAllUserData(response.data);
         } catch (error: any) {
             console.error('Error:', error);
         }
@@ -29,8 +26,27 @@ const Login = ({navigation}) => {
 
     fetchData();
     }, []);
-  
-  if (!userData) {
+
+  const findUser = async () => {
+      try {
+          const response = await axios.get(API_URL + '/users/' + userId);
+          userData = response.data;
+      } catch (error: any) {
+          console.error('Error:', error);
+      }
+  };
+
+  const updateUser = async () => {
+    let updatedData = userData;
+    updatedData.isLogged = true;
+      try { 
+        await axios.put(`${API_URL}/user/${userId}`, updatedData);
+      } catch (error: any) {
+          console.error('Error:', error);
+      }
+  };
+
+  if (!allUserData) {
     return (
       <View>
         <Text>Carregando...</Text>
@@ -39,21 +55,20 @@ const Login = ({navigation}) => {
   }
 
   const handleSubmit = () => {
-    const filteredUser = userData.filter(user => 
-      user.email.toLowerCase() === (login.toLowerCase())
-  );
-    const filteredPassword = userData.filter(user =>
-      user.password.toLowerCase() === (password.toLowerCase())
-  );
+    const filteredUser = allUserData.find(user =>
+      user.email.toLowerCase() === login.toLowerCase() && 
+      user.password.toLowerCase() === password.toLowerCase()
+    );
 
-  if (filteredUser.length > 0 && filteredPassword.length > 0){
-    console.log("LOGIN CORRETO");
-    setIsLogged(true);
-    navigation.navigate("Carrinho", { isLogged: isLogged});
-  }
-  else
-    console.log("LOGIN INCORRETO");
-};
+    if (filteredUser){
+      userId = filteredUser.id;
+      findUser();
+      setTimeout(updateUser, 1000);
+      navigation.navigate("Carrinho");
+    }
+    else
+      alert("Dados de login incorretos!");
+  };
 
   return (
     <>

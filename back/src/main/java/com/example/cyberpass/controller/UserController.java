@@ -1,4 +1,4 @@
-package com.example.cyberpass.controller;
+package com.example.cyberpass.Controller;
 
 import com.example.cyberpass.Modal.User;
 import com.example.cyberpass.Service.UserService;
@@ -39,11 +39,44 @@ public class UserController {
         }
     }
 
-    @PostMapping("/user/")
+    @PostMapping("/user")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
             User createdUser = userService.createUser(user);
             return ResponseEntity.ok(createdUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PutMapping("/user/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        try {
+            User existingUser = userService.getUser(id);
+            if (existingUser != null) {
+                existingUser.setCpf(updatedUser.getCpf());
+                existingUser.setName(updatedUser.getName());
+                existingUser.setLastname(updatedUser.getLastname());
+                existingUser.setPassword(updatedUser.getPassword());
+                existingUser.setEmail(updatedUser.getEmail());
+                existingUser.setBirthday(updatedUser.getBirthday());
+                existingUser.setGender(updatedUser.getGender());
+                existingUser.setCep(updatedUser.getCep());
+                existingUser.setTel(updatedUser.getTel());
+                existingUser.setUf(updatedUser.getUf());
+                existingUser.setComplement(updatedUser.getComplement());
+                existingUser.setRefpoint(updatedUser.getRefpoint());
+                existingUser.setCountry(updatedUser.getCountry());
+                existingUser.setNeighbourhood(updatedUser.getNeighbourhood());
+                existingUser.setAddress(updatedUser.getAddress());
+                existingUser.setCity(updatedUser.getCity());
+                existingUser.setIsLogged(updatedUser.getIsLogged());
+
+                User savedUser = userService.saveUser(existingUser);
+                return ResponseEntity.ok(savedUser);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

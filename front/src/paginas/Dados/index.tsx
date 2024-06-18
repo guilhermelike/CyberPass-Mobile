@@ -1,7 +1,8 @@
-import { View, Text, StatusBar, StyleSheet, TextInput, Image, ScrollView, ImageBackground, TouchableOpacity} from 'react-native'
+import { View, Text, StyleSheet, TextInput, ScrollView, ImageBackground, TouchableOpacity} from 'react-native'
 import React, { useState } from 'react'
-import { Button } from 'react-native-paper'
 import { TextInputMask } from 'react-native-masked-text'
+import axios from 'axios';
+import { API_URL } from '../../../api';
 
 const Dados = ({navigation}) => {
   const [cpf, setCpf] = useState('');
@@ -13,8 +14,6 @@ const Dados = ({navigation}) => {
   const [cidade, setCidade] = useState('');
   const [uf, setUf] = useState('');
   const [pais, setPais] = useState('');
-  const [senha, setSenha] = useState('');
-  const [confirmacaoSenha, setConfirmacaoSenha] = useState('');
   const [modoEdicao, setModoEdicao] = useState(false);
   const [changePasswordMode, setChangePasswordMode] = useState(false);
 
@@ -38,6 +37,22 @@ const Dados = ({navigation}) => {
     }
   };
 
+  const Logoff = async () => {
+    let allUserData: any;
+    let loggedData: any;
+    let updatedData: any;
+
+    try {
+         allUserData = (await axios.get(API_URL + '/users')).data;
+         loggedData = allUserData.filter(user => user.isLogged === true);
+         updatedData = (await axios.get(API_URL + '/users/' + loggedData[0].id)).data;
+         updatedData.isLogged = false;
+         await axios.put(`${API_URL}/user/${loggedData[0].id}`, updatedData);
+    } catch (error: any) {
+        console.error('Error:', error);
+  }
+}
+
   const alterarInputs = () => {
     if (inputsHabilitados == false){
     setInputsHabilitados(true);
@@ -47,12 +62,6 @@ const Dados = ({navigation}) => {
       setInputsHabilitados(false);
       setModoEdicao(false);
     }
-  };
-
-  const mudarSenha = () => {
-    setChangePasswordMode(true);
-    setModoEdicao(false);
-    setInputsHabilitados(true);
   };
 
   const salvarDados = () => {
@@ -70,6 +79,7 @@ const Dados = ({navigation}) => {
             <View style={{marginTop: 25, display: 'flex', gap: 10, backgroundColor: 'white', borderRadius: 15, padding: 10, marginBottom: 70}}>
             {!changePasswordMode && (
               <>
+              
               <View style={styles.campo2}>
                 <View >
                   <Text style={styles.label}>Nome:</Text>
@@ -203,8 +213,8 @@ const Dados = ({navigation}) => {
                     </TouchableOpacity>
                   </View>
                   <View style={styles.botao}>
-                    <TouchableOpacity onPress={mudarSenha} style={styles.botao2}>
-                      <Text style={{ color: 'white', fontSize: 18 }}>Mudar a Senha</Text>
+                    <TouchableOpacity onPress={Logoff} style={styles.botao2}>
+                      <Text style={{ color: 'white', fontSize: 18 }}>Logoff</Text>
                     </TouchableOpacity>
                   </View>
                   </View>

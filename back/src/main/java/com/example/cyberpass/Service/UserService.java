@@ -25,6 +25,10 @@ public class UserService {
         return userRepository.findById(user.getId()).orElse(null);
     }
 
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
     public List<User> getAllUsers()
     {
         return userRepository.findAll();
