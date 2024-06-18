@@ -16,6 +16,10 @@ public class Request {
     @JoinColumn(name = "eventId", referencedColumnName = "id")
     private Event event;
 
+    private int quantidadeTotal;
+
+    private float preçoTotal;
+
     // Getters and Setters
 
     public Long getId() {
@@ -40,5 +44,21 @@ public class Request {
 
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    public int getQuantidadeTotal() {
+        return quantidadeTotal;
+    }
+
+    public void setQuantidadeTotal(int quantidadeTotal) {
+        this.quantidadeTotal = quantidadeTotal;
+    }
+
+    public float getPreçoTotal() {
+        return preçoTotal;
+    }
+
+    public void setPreçoTotal(float preçoTotal) {
+        this.preçoTotal = preçoTotal;
     }
 }
