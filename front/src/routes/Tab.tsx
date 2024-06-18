@@ -88,6 +88,7 @@ function FluxoPedido(){
             <Stack.Screen name="Carrinho" component={Carrinho}/>
             <Stack.Screen name="Pagamento" component={Pagamento}/>
             <Stack.Screen name="Login" component={Login}/>
+            <Stack.Screen name="MeusPedidos" component={Usuario}/>
         </Stack.Navigator>
     )
 }

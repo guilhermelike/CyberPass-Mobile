@@ -4,8 +4,14 @@ import { StatusBar } from 'expo-status-bar';
 import { IconButton } from 'react-native-paper';
 import Card from '../../componentes/Card/Index';
 import { useEventData } from '../../hooks/useEventData';
+import { format } from 'date-fns/format';
+import { parseISO } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 const Home = ({navigation}) => {
+  const formatDate = (date) => {
+    return format(parseISO(date), "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
+  };
   const [text, onChangeText] = React.useState('');
   const { data } = useEventData();
   const isChampionship = data?.filter(eventData => eventData.championship === true);
@@ -37,7 +43,7 @@ const Home = ({navigation}) => {
           </View>
         </ImageBackground>
 
-        <ImageBackground source={require('../../../assets/background.png')} resizeMode='cover'>
+        <ImageBackground source={require('../../../assets/background.png')} resizeMode='cover' style={{paddingBottom: 80}}>
           <View style={styles.campeonatos}>
             <Text style={styles.textcamp}>Campeonatos</Text>
             <View style={styles.containercard}>
@@ -49,7 +55,7 @@ const Home = ({navigation}) => {
                     key={eventData.id}
                     titulo={eventData.name}
                     imagemUri={eventData.image}
-                    data={eventData.date}
+                    data={formatDate(eventData.date)}
                     onPress={()=> navigation.navigate("Evento")}
                   />
                   </TouchableOpacity>
@@ -78,7 +84,7 @@ const Home = ({navigation}) => {
                       key={eventData.id}
                       titulo={eventData.name}
                       imagemUri={eventData.image}
-                      data={eventData.date}
+                      data={formatDate(eventData.date)}
                       onPress={()=> navigation.navigate("Evento")}
                     />
                   </TouchableOpacity>
@@ -101,7 +107,7 @@ const Home = ({navigation}) => {
                     key={eventData.id}
                     titulo={eventData.name}
                     imagemUri={eventData.image}
-                    data={eventData.date}
+                    data={formatDate(eventData.date)}
                   />
                 </TouchableOpacity>
               )

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ImageBackground, ScrollView, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, ImageBackground, ScrollView, TextInput, TouchableOpacity, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Ingresso from '../../componentes/Ingresso/Index';
 import { TextInputMask } from 'react-native-masked-text';
@@ -6,18 +6,22 @@ import DropdownComponent from '../../componentes/Dropdown/Index';
 import { Dropdown } from 'react-native-element-dropdown';
 import axios from 'axios';
 import { API_URL } from '../../../api';
+import { format } from 'date-fns/format';
 
 const isLoggedIn = false;
 
 const Pagamento = ({navigation, route}) => {
-  const { eventos, requestId, userId} = route.params;
+  const { eventos, requestId, userId, setEventos} = route.params;
 
   const [cpf, setCpf] = useState('');
+  const [cartao, setCartao] = useState('');
   const [nome, setNome] = useState('');
   const [sobrenome, setSobrenome] = useState('');
   const [email, setEmail] = useState('');
   const [data, setData] = useState('');
   const [numero, setNumero] = useState('');
+  const [mes, setMes] = useState('');
+  const [ano, setAno] = useState('');
   const [CEP, setCEP] = useState('');
   const [endereco, setEndereco] = useState('');
   const [bairro, setBairro] = useState('');
@@ -31,22 +35,24 @@ const Pagamento = ({navigation, route}) => {
 
   const dataDropdown = [
     { label: 'Pix', value: 'opcao1' },
-    { label: 'Cartão de Crédito - Até 6x', value: 'opcao2' },
+    { label: 'Cartão de Crédito', value: 'opcao2' },
   ];
 
   const [inputsHabilitados, setInputsHabilitados] = useState(false);
-
+  const [isPaymentButtonEnabled, setIsPaymentButtonEnabled] = useState(false);
+  const [isFinalizarButtonEnable, setIsFinalizarButtonEnable] = useState(false);
+  
   useEffect(() => {
-    // Função para buscar as informações do usuário
     const fetchUserData = async () => {
       try {
         const response = await axios.get(API_URL + `/users/${userId}`);
         const userData = response.data;
         console.log(userData);
         setNome(userData.name);
+        setSobrenome(userData.lastname);
         setEmail(userData.email);
         setCpf(userData.cpf);
-        setData(userData.birthday);
+        setData(formatarData(userData.birthday));
         setNumero(userData.tel);
         setCidade(userData.city);
         setBairro(userData.neighbourhood);
@@ -69,10 +75,47 @@ const Pagamento = ({navigation, route}) => {
     fetchUserData();
   }, [userId]);
 
+  const formatarData = (data) => {
+    if (!data) return '';
+    return format(new Date(data), 'dd/MM/yyyy');
+  };
+
   useEffect(() => {
-    console.log("CEP atualizado:", cep);
-  }, [cep]);
-  
+    console.log("CEP atualizado:", CEP);
+  }, [CEP]);
+
+  useEffect(() => {
+    validateFields();
+  }, [nome, sobrenome, email, cpf, data, numero, CEP, endereco, bairro, cidade, uf, pais]);
+
+  useEffect(() => {
+    validatePayment();
+  }, [cartao, mes, ano, selectedOption]);
+
+  const validateFields = () => {
+    if (
+      nome && sobrenome && email && cpf && data && numero &&
+      CEP && endereco && bairro && cidade && uf && pais
+
+    ) {
+      setIsPaymentButtonEnabled(true);
+    } else {
+      setIsPaymentButtonEnabled(false);
+    }
+  };
+
+  const validatePayment = () => {
+    if (
+      (selectedOption === 'opcao1') || 
+      (selectedOption === 'opcao2' && cartao && mes && ano)
+    ) {
+      setIsFinalizarButtonEnable(true);
+    } else {
+      setIsFinalizarButtonEnable(false);
+
+    }
+  };
+
 
   // const buscarEnderecoPorCep = async () => {
   //   try {
@@ -96,9 +139,10 @@ const Pagamento = ({navigation, route}) => {
       setModoEdicao(false);
 } 
 
+const [pedidoFinalizado, setPedidoFinalizado] = useState(false);
+
   const finalizar = () => {
-    setModoEdicao(false);
-    setInputsHabilitados(true);
+    setPedidoFinalizado(true);
   };
 
   const irParaPagamento = () => {
@@ -158,7 +202,19 @@ const Pagamento = ({navigation, route}) => {
 
           <View style={{backgroundColor: 'white', borderRadius: 15, padding: 10, marginTop: 20, paddingBottom: 20}}>
             
-          {!modoEdicao ? (
+          {pedidoFinalizado ? (
+            <>
+              <Text style={{fontWeight: 500, fontSize: 24, textAlign: 'center'}}>Pagamento aprovado!</Text>
+              <View style={{width:275, height: 130, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <Image source={require('../../../assets/certo.png')} style={{height: '100%', width: '50%'}}></Image>
+              </View>
+              <Text style={{fontWeight: 500, fontSize: 19, textAlign: 'center'}}>Você pode visualizar seu pedido em "Meus Pedidos"</Text>
+              <View style={{display: 'flex', alignItems: 'center', marginTop: 15}}>
+                
+              </View>
+            </>
+          ) :
+          !modoEdicao ? (
             <>
             <Text style={{ paddingTop: 5, paddingBottom: 10, fontSize: 18, fontWeight: 600}}>Preencha os campos obrigatórios.</Text>
               <View style={Styles.campo2}>
@@ -169,7 +225,7 @@ const Pagamento = ({navigation, route}) => {
 
                 <View>
                   <Text style={Styles.label}>Sobrenome:*</Text>
-                  <TextInput style={Styles.inputmetade} placeholder='Batista'></TextInput>
+                  <TextInput style={Styles.inputmetade} value={sobrenome} onChangeText={text => setSobrenome(text)} placeholder='Batista'></TextInput>
                 </View>
               </View>
 
@@ -266,6 +322,8 @@ const Pagamento = ({navigation, route}) => {
               </View>
               </>
           ) : (
+            <>
+            <Text style={{fontSize: 19, fontWeight: 500, marginBottom: 10}}>Forma de Pagamento</Text>
             <Dropdown
               style={Styles.dropdown}
               placeholderStyle={Styles.placeholderStyle}
@@ -277,51 +335,94 @@ const Pagamento = ({navigation, route}) => {
               value={selectedOption}
               onChange={item => setSelectedOption(item.value)}
             />
+            </>
           )}
 
-{selectedOption === 'opcao1' && (
-              <View style={Styles.campo}>
-                <Text style={Styles.label}>Campo para Opção 1:</Text>
-                <TextInput
-                  style={[Styles.input, !inputsHabilitados && Styles.inputDesabilitado]}
-                  editable={inputsHabilitados}
-                />
-              </View>
-            )}
-
             {selectedOption === 'opcao2' && (
-              <View style={Styles.campo}>
-                <Text style={Styles.label}>Campo para Opção 2:</Text>
+              <>
+                <View style={Styles.campo}>
+                  <Text style={Styles.label}>Número do cartão:</Text>
+                  <TextInputMask
+                    type={'credit-card'}
+                    options={{
+                      issuer: 'visa-or-mastercard'
+                    }}
+                    value={cartao}
+                    onChangeText={text => setCartao(text)}
+                    placeholder='1111 1111 1111 1111'
+                    style={Styles.input}
+                  />
+                </View>
+
+                <View style={Styles.campo}>
+                <Text style={Styles.label}>Nome do titular do cartão:</Text>
                 <TextInput
-                  style={[Styles.input, !inputsHabilitados && Styles.inputDesabilitado]}
-                  editable={inputsHabilitados}
+                  placeholder='Peter Parker'
+                  style={Styles.input}
                 />
-              </View>
+                </View>
+
+                <View style={{display: 'flex', flexDirection: 'row', width: '100%', gap: 20}}>
+                  <View>
+                    <Text style={Styles.label}>Válido até:</Text>
+                    <View style={Styles.campo2}>
+                      <TextInputMask
+                        type={'datetime'}
+                        options={{
+                          format: 'MM/YY'
+                        }}
+                        value={mes}
+                        onChangeText={text => setMes(text)}
+                        style={Styles.inputmetade}
+                        placeholder='Mês/Ano'
+                        
+                      />
+                    </View>
+                  </View>
+
+                  <View>
+                    <Text style={Styles.label}>CVV:</Text>
+                    <View style={Styles.campo2}>
+                      <TextInputMask
+                        type={'only-numbers'}
+                        maxLength={3}
+                        value={ano}
+                        onChangeText={text => setAno(text)}
+                        style={Styles.inputmetade}
+                        placeholder='111'
+
+                      />
+                    </View>
+                  </View>
+                </View>
+              </>
             )}
 
               {!modoEdicao ? (
                 <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>              
                 <View style={{marginTop: 15, justifyContent: 'center', display: 'flex', alignItems: 'center'}}>
-                  <TouchableOpacity onPress={irParaPagamento} style={Styles.botao3}>
-                    <Text style={{ color: 'white', fontSize: 18 }}>Pagamento</Text>
+                <TouchableOpacity onPress={irParaPagamento} style={[Styles.botao3, !isPaymentButtonEnabled && { backgroundColor: '#ccc' }]} disabled={!isPaymentButtonEnabled}>
+                <Text style={{ color: 'white', fontSize: 18 }}>Pagamento</Text>
                   </TouchableOpacity>
                 </View>
                 </View>
-              ) : (
+              ) : modoEdicao && !pedidoFinalizado ? (
                 <>
-                <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>              
+                <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', gap: 10}}>              
                  <View style={{marginTop: 20}}>
                    <TouchableOpacity onPress={Voltar} style={Styles.botao2}>
                      <Text style={{ color: 'white', fontSize: 18 }}>Voltar</Text>
                    </TouchableOpacity>
                  </View>
                  <View style={{marginTop: 20}}>
-                   <TouchableOpacity onPress={finalizar} style={Styles.botao2}>
-                     <Text style={{ color: 'white', fontSize: 18 }}>Finalizar</Text>
+                   <TouchableOpacity onPress={finalizar} style={[Styles.botao2, !isFinalizarButtonEnable && { backgroundColor: '#ccc' }]} >
+                     <Text style={{ color: 'white', fontSize: 18 }} >Finalizar</Text>
                    </TouchableOpacity>
                  </View>
                  </View>
                </>
+              ) : (
+                <></>
               )}
 
           </View>
@@ -469,16 +570,3 @@ const Styles = StyleSheet.create({
 
 export default Pagamento;
 
-function setNome(nome: any) {
-  throw new Error('Function not implemented.');
-}
-
-
-function setSobrenome(sobrenome: any) {
-  throw new Error('Function not implemented.');
-}
-
-
-function setEmail(email: any) {
-  throw new Error('Function not implemented.');
-}

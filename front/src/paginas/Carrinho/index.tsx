@@ -24,19 +24,29 @@ const Carrinho = ({navigation, route}) => {
   const valorTotalGeral = eventos.reduce((total, evento) => {
     const valorTotalInteira = evento.quantidadeInteira * evento.eventData.priceInteira;
     const valorTotalMeia = evento.quantidadeMeia * evento.eventData.priceMeia;
+    const preçoTotal = valorTotalInteira + valorTotalMeia;
+    const quantidadeTotal = evento.quantidadeInteira + evento.quantidadeMeia;
     return total + valorTotalInteira + valorTotalMeia;
+    
   }, 0);
 
   
   const handlePagamento = async () => {
     try {
-      const userId = 1; // Substitua com o CPF real do usuário logado
-      const ticketId = 1; // Substitua com o ticketId real se disponível, e certifique-se que é um número
+      const userId = 1; 
+
+      const requests = eventos.map(evento => {
+        const valorTotalInteira = evento.quantidadeInteira * evento.eventData.priceInteira;
+        const valorTotalMeia = evento.quantidadeMeia * evento.eventData.priceMeia;
+        const preçoTotal = valorTotalInteira + valorTotalMeia;
+        const quantidadeTotal = evento.quantidadeInteira + evento.quantidadeMeia;  
   
-      const requests = eventos.map(evento => ({
+      return {
           event: { id: evento.eventData.id },
-          user: { id: userId }
-      }));
+          user: { id: userId },
+          preçoTotal,
+          quantidadeTotal
+      }});
   
       console.log("Enviando dados:", requests);
   
@@ -48,10 +58,10 @@ const Carrinho = ({navigation, route}) => {
   
       console.log("Resposta da API:", response.data);
 
-      // Assumindo que response.data é um array de objetos de requests e que cada objeto possui um ID
-      const requestId = response.data[0]?.id; // Obtenha o ID da primeira requisição, ajuste conforme necessário
-  
-      // Navegar para a tela de pagamento após a criação do request, passando o ID
+      const requestId = response.data[0]?.id; 
+
+      eventos.forEach(evento => removerEvento(evento.eventData.id));
+
       navigation.navigate("Pagamento", { eventos, requestId, userId });
     } catch (error) {
       if (error.response) {
@@ -234,6 +244,18 @@ const Styles = StyleSheet.create({
     backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  botao3:{
+    backgroundColor: '#ff005c',
+    color: 'white',
+    height: 50,
+    width: 230,
+    display: 'flex',
+    verticalAlign: 'middle',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 30,
+    borderRadius: 15
   },
   removerBotao: {
     backgroundColor: '#ff005c',
